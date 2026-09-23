@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1115">
+  <meta name="description" content="RideLog - Premium desktop and mobile motorcycle ride, fuel, mileage, and maintenance tracker.">
+  <title>RideLog — Motorcycle Ride &amp; Maintenance Tracker</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- Leaflet CSS for Interactive Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Leaflet JS CDN -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+
+  <!-- Main Responsive App Shell -->
+  <div id="app-container">
+
+    <!-- ========================================== -->
+    <!-- DESKTOP LEFT SIDEBAR (>= 768px)            -->
+    <!-- ========================================== -->
+    <aside id="desktop-sidebar">
+      <div>
+        <!-- Figma Brand Header -->
+        <div class="sidebar-brand-figma">
+          <div class="sidebar-logo-figma">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="6" cy="19" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <path d="M12 17h4.5l2.5-6H6"></path>
+            </svg>
+          </div>
+          <span class="sidebar-brand-title">RIDELOG</span>
+        </div>
+
+        <!-- Figma Navigation Items -->
+        <nav class="sidebar-nav">
+          <button class="nav-item sidebar-nav-item-figma active" data-tab="dashboard" title="Home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            <span>Home</span>
+          </button>
+
+          <button class="nav-item sidebar-nav-item-figma" data-tab="garage" title="Garage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="6" cy="19" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <path d="M12 17h4.5l2.5-6H6"></path>
+            </svg>
+            <span>Garage</span>
+          </button>
+
+          <button class="nav-item sidebar-nav-item-figma" data-tab="maintenance" title="Maintenance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+            <span>Maintenance</span>
+          </button>
+
+          <div class="sidebar-nav-separator"></div>
+
+          <button class="nav-item sidebar-nav-item-figma" data-tab="rides" title="Service History">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Service History</span>
+          </button>
+
+          <button class="nav-item sidebar-nav-item-figma" data-tab="settings" id="btn-sidebar-settings-nav" title="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span>Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- User Profile & Quick Settings Footer -->
+      <div class="sidebar-footer-figma">
+        <div class="sidebar-user-row" id="btn-sidebar-user-profile" title="Account settings">
+          <div class="sidebar-avatar-circle" id="sidebar-avatar-letter">R</div>
+          <div class="sidebar-user-text">
+            <span class="sidebar-user-name-text" id="sidebar-rider-name">Rajarshee</span>
+            <span class="sidebar-user-email-text" id="sidebar-rider-email">rajarshee@ridelog.io</span>
+          </div>
+        </div>
+        <button class="sidebar-logout-btn" id="btn-sidebar-logout" title="Log out">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- MAIN APPLICATION WRAPPER                   -->
+    <!-- ========================================== -->
+    <div id="desktop-main-wrapper">
+
+      <!-- MOBILE TOP HEADER (< 768px only) -->
+      <header class="app-header">
+        <div class="header-brand" style="display: flex; align-items: center; gap: 10px;">
+          <div class="sidebar-logo-figma" style="width: 32px; height: 32px; border-radius: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="6" cy="19" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <path d="M12 17h4.5l2.5-6H6"></path>
+            </svg>
+          </div>
+          <span class="sidebar-brand-title" style="font-size: 1.05rem;">RIDELOG</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="sidebar-avatar-circle" id="mobile-header-avatar" style="width: 32px; height: 32px; font-size: 0.85rem; cursor: pointer;">R</div>
+        </div>
+      </header>
+
+      <!-- DESKTOP TOPBAR (>= 768px only) -->
+      <header id="desktop-topbar">
+        <div class="topbar-title-wrap">
+          <h1 class="topbar-page-title" id="topbar-page-title">Dashboard</h1>
+          <span class="topbar-page-subtitle" id="topbar-page-subtitle">Here's what's happening with your rides.</span>
+        </div>
+
+        <div class="topbar-search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="desktop-global-search" class="topbar-search-input" placeholder="Search rides, routes, places...">
+          <span class="topbar-search-key">/</span>
+        </div>
+
+        <div class="topbar-actions">
+          <!-- Desktop Active Vehicle Switcher Dropdown -->
+          <div class="bike-switcher-wrap">
+            <button class="topbar-btn" id="btn-desktop-bike-switcher" title="Switch ride">
+              <span>🏍️</span>
+              <span id="desktop-topbar-bike-name">Hunter 350</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="bike-dropdown" id="desktop-bike-dropdown"></div>
+          </div>
+
+          <!-- Notification Bell with Counter -->
+          <div class="topbar-notif-wrap">
+            <button class="topbar-icon-btn" id="btn-desktop-notifications" title="Coming up">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="topbar-badge-counter" id="topbar-notification-badge">0</span>
+            </button>
+            <div class="topbar-flyout" id="desktop-notifications-dropdown">
+              <div class="topbar-flyout-header">
+                <span class="topbar-flyout-title">Coming up</span>
+                <button class="link-btn" id="btn-notif-view-all" style="font-size: 0.76rem;">See all</button>
+              </div>
+              <div class="topbar-flyout-list" id="desktop-notifications-list"></div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <button class="topbar-btn topbar-btn-primary" id="btn-topbar-add-ride">
+            <span>+ Log a ride</span>
+          </button>
+
+          <button class="topbar-btn" id="btn-topbar-quick-service">
+            <span>+ Plan service</span>
+          </button>
+
+          <!-- Settings Button -->
+          <button class="topbar-icon-btn" id="btn-topbar-settings" title="Settings &amp; preferences">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT AREA -->
+      <div id="desktop-content-area">
+
+        <!-- ========================================== -->
+        <!-- 1. DASHBOARD SCREEN                        -->
+        <!-- ========================================== -->
+        <main id="screen-dashboard" class="app-screen active">
+
+          <!-- Desktop Greeting Header -->
+          <div style="margin-bottom: 24px;">
+            <h1 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em;" id="dash-greeting-text">Good morning, Rajarshee</h1>
+            <p style="font-size: 0.85rem; color: #64748B; margin-top: 4px;" id="dash-greeting-sub">Here's the status of your machine today.</p>
+          </div>
+
+          <!-- Hero Vehicle Card Container -->
+          <div id="dash-hero-container"></div>
+
+          <!-- 4 Metric Cards Grid -->
+          <div class="metric-grid-figma" id="dash-metrics-container"></div>
+
+          <!-- What's Coming Up Section -->
+          <div style="margin-top: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF;">What's coming up?</h3>
+              <button class="link-btn" id="btn-dash-view-all-maint" style="font-size: 0.82rem; color: #3B82F6; font-weight: 600;">View all</button>
+            </div>
+            <div id="dash-upcoming-container"></div>
+          </div>
+
+          <!-- Secondary Insights: Mileage Trend Chart & Performance Statistics -->
+          <div class="dash-desktop-grid" style="margin-top: 32px;">
+            
+            <!-- Left Column: Chart & Recent Rides -->
+            <div class="dash-col-primary">
+              <!-- Mileage Trend Chart Card -->
+              <div class="card" style="background: #13161C; border: 1px solid #1E232E; border-radius: 16px;">
+                <div class="section-header" style="margin: 0 0 10px;">
+                  <h3 class="section-title">Mileage trend</h3>
+                </div>
+                <div class="chart-container">
+                  <canvas id="mileage-chart"></canvas>
+                  <div id="chart-empty-msg" class="empty-state" style="padding: 24px 12px; height: 100%; border: none;">
+                    <p style="font-size: 0.85rem;">No rides logged yet to chart your mileage.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent Rides Section -->
+              <div style="margin-top: 24px;">
+                <div class="section-header">
+                  <h3 class="section-title">Recent rides</h3>
+                  <button class="link-btn" id="btn-dash-view-all-rides">See all</button>
+                </div>
+                <div id="dash-recent-rides">
+                  <!-- Rendered dynamically via dashboard.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Ride Statistics Overview -->
+            <div class="dash-col-secondary">
+              <div class="card" style="background: #13161C; border: 1px solid #1E232E; border-radius: 16px;">
+                <div class="section-header" style="margin: 0 0 12px;">
+                  <h3 class="section-title">Ride statistics</h3>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
+                    <span style="font-size: 0.78rem; color: #64748B;">Total distance</span>
+                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-total-dist">0 km</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
+                    <span style="font-size: 0.78rem; color: #64748B;">Average mileage</span>
+                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-avg-mileage">0.0 km/L</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
+                    <span style="font-size: 0.78rem; color: #64748B;">Fuel spent</span>
+                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-fuel-cost">₹0</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
+                    <span style="font-size: 0.78rem; color: #64748B;">Trips taken</span>
+                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-total-rides">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </main>
+
+        <!-- ========================================== -->
+        <!-- 2. GARAGE SCREEN                           -->
+        <!-- ========================================== -->
+        <section id="screen-garage" class="app-screen">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h1 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em;">My Garage</h1>
+              <p style="font-size: 0.85rem; color: #64748B; margin-top: 4px;" id="garage-bikes-count-sub">2 bikes registered</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-bike-garage" style="width: auto; padding: 10px 20px; font-weight: 700;">+ Add a ride</button>
+          </div>
+
+          <!-- Garage Motorcycle Cards Grid -->
+          <div id="garage-bikes-list">
+            <!-- Rendered dynamically via garage.js -->
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. ADD RIDE SCREEN                         -->
+        <!-- ========================================== -->
+        <section id="screen-add-ride" class="app-screen">
+          <div class="section-header" style="margin-top: 4px;">
+            <div>
+              <h2 class="section-title" id="add-ride-title">Log a ride</h2>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Record where you went, distance, and fuel stop</p>
+            </div>
+          </div>
+
+          <form id="form-add-ride" novalidate="">
+            
+            <div class="add-ride-desktop-layout">
+              
+              <!-- Left Column: Map Route Finder -->
+              <div class="add-ride-map-col">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                      <span>🗺️</span> Map your route (optional)
+                    </span>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-show-route" style="width: auto; padding: 5px 12px; font-size: 0.78rem;">
+                      Show route
+                    </button>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label class="form-label" for="input-start-location" style="font-size: 0.75rem;">Starting point</label>
+                      <input type="text" id="input-start-location" class="form-input" placeholder="e.g. Kolkata" style="font-size: 0.85rem; padding: 8px 10px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label class="form-label" for="input-dest-location" style="font-size: 0.75rem;">Destination</label>
+                      <input type="text" id="input-dest-location" class="form-input" placeholder="e.g. Tarapith" style="font-size: 0.85rem; padding: 8px 10px;">
+                    </div>
+                  </div>
+
+                  <!-- Status / Distance / Time badge -->
+                  <div id="map-calc-status" style="display: none; font-size: 0.78rem; margin-top: 10px; padding: 8px 12px; background: var(--bg-secondary); border-radius: var(--radius-sm);"></div>
+
+                  <!-- Interactive Leaflet Map Preview -->
+                  <div id="add-ride-map-container" class="map-container"></div>
+                </div>
+              </div>
+
+              <!-- Right Column: Form Fields & Live Calculation -->
+              <div class="add-ride-fields-col">
+                <div class="form-group">
+                  <label class="form-label" for="input-ride-name">Give this ride a name</label>
+                  <input type="text" id="input-ride-name" class="form-input" placeholder="e.g. Weekend breakfast highway run">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-ride-route">Route *</label>
+                  <input type="text" id="input-ride-route" class="form-input" placeholder="e.g. Kolkata → Tarapith" required="">
+                  <div class="form-error" id="err-input-ride-route"></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-ride-date">Date *</label>
+                  <input type="date" id="input-ride-date" class="form-input" required="">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div class="form-group">
+                    <label class="form-label" for="input-start-km">Starting odometer (km) *</label>
+                    <input type="number" id="input-start-km" class="form-input" inputmode="numeric" placeholder="12500" required="">
+                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Keep this updated so your service reminders stay accurate.</span>
+                    <div class="form-error" id="err-input-start-km"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="input-end-km">Ending odometer (km) *</label>
+                    <input type="number" id="input-end-km" class="form-input" inputmode="numeric" placeholder="12714" required="">
+                    <div class="form-error" id="err-input-end-km"></div>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div class="form-group">
+                    <label class="form-label" for="input-fuel">Fuel added (L) *</label>
+                    <input type="number" step="0.1" id="input-fuel" class="form-input" inputmode="decimal" placeholder="5.8" required="">
+                    <div class="form-error" id="err-input-fuel"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="input-fuel-price">Fuel price (₹/L) *</label>
+                    <input type="number" step="0.1" id="input-fuel-price" class="form-input" inputmode="decimal" placeholder="105.0" required="">
+                    <div class="form-error" id="err-input-fuel-price"></div>
+                  </div>
+                </div>
+
+                <!-- Live Calculation Preview -->
+                <div class="calc-preview-bar">
+                  <div class="calc-item">
+                    <span class="calc-title">Distance</span>
+                    <span class="calc-val" id="calc-dist">0 km</span>
+                  </div>
+                  <div class="calc-item">
+                    <span class="calc-title">Mileage</span>
+                    <span class="calc-val" id="calc-mileage">0.0 km/L</span>
+                  </div>
+                  <div class="calc-item">
+                    <span class="calc-title">Fuel spent</span>
+                    <span class="calc-val" id="calc-cost">₹0</span>
+                  </div>
+                  <div class="calc-item">
+                    <span class="calc-title">Cost per km</span>
+                    <span class="calc-val" id="calc-per-km">₹0.00/km</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-ride-notes">Notes (optional)</label>
+                  <textarea id="input-ride-notes" class="form-textarea" rows="2" placeholder="Road conditions, weather, stops, tire pressure..."></textarea>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">
+                  <button type="submit" class="btn btn-primary" id="btn-save-ride">Save ride</button>
+                  <button type="button" class="btn btn-secondary" id="btn-cancel-edit-ride" style="display: none;">Cancel</button>
+                </div>
+              </div>
+
+            </div>
+
+          </form>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. RIDE HISTORY SCREEN                     -->
+        <!-- ========================================== -->
+        <section id="screen-rides" class="app-screen">
+          
+          <div class="section-header" style="margin-top: 4px;">
+            <div>
+              <h2 class="section-title">Past rides</h2>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Every road, route, and stop you've logged</p>
+            </div>
+          </div>
+
+          <!-- Search & Sort Controls -->
+          <div class="search-filter-wrap">
+            <div class="search-input-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="input-ride-search" class="search-input" placeholder="Search route, title, town...">
+            </div>
+
+            <div class="filter-row">
+              <span class="filter-label">Sort by:</span>
+              <select id="select-ride-sort" class="filter-select">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="longest">Longest trip</option>
+                <option value="mileage">Best mileage</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Rides List Container -->
+          <div id="rides-history-list">
+            <!-- Rendered dynamically via rides.js -->
+          </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 5. MAINTENANCE SCREEN                      -->
+        <!-- ========================================== -->
+        <section id="screen-maintenance" class="app-screen">
+          
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h1 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em;">Keep it running.</h1>
+              <p style="font-size: 0.85rem; color: #64748B; margin-top: 4px;" id="maint-bike-subtitle">Scheduled maintenance for Hunter 350</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-maint-header" style="width: auto; padding: 10px 20px; font-weight: 700;">+ Plan service</button>
+          </div>
+
+          <!-- Segmented Pill Tabs -->
+          <div class="segmented-pill-tabs" id="maint-pill-tabs">
+            <button class="pill-tab-btn active" data-maint-filter="upcoming" id="tab-maint-upcoming">Upcoming (3)</button>
+            <button class="pill-tab-btn" data-maint-filter="overdue" id="tab-maint-overdue">Overdue (0)</button>
+            <button class="pill-tab-btn" data-maint-filter="completed" id="tab-maint-completed">Completed (2)</button>
+          </div>
+
+          <!-- Tasks List Container -->
+          <div id="maint-tasks-container">
+            <!-- Rendered dynamically via maintenance.js -->
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- MOBILE BOTTOM NAVIGATION (< 768px only)   -->
+      <!-- ========================================== -->
+      <nav class="bottom-nav">
+        <button class="nav-item active" data-tab="dashboard" aria-label="Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+          <span>Home</span>
+        </button>
+
+        <button class="nav-item" data-tab="garage" aria-label="Garage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="6" cy="19" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <path d="M12 17h4.5l2.5-6H6"></path>
+          </svg>
+          <span>Garage</span>
+        </button>
+
+        <button class="nav-item" data-tab="maintenance" aria-label="Maintenance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+          <span>Maintenance</span>
+        </button>
+
+        <button class="nav-item" data-tab="rides" aria-label="Service History">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Service History</span>
+        </button>
+      </nav>
+
+    </div> <!-- End desktop-main-wrapper -->
+
+    <!-- ========================================== -->
+    <!-- RIDE DETAIL MODAL                          -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-ride-detail">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="modal-ride-name">Ride Details</h3>
+            <p id="modal-ride-route" style="font-size: 0.85rem; color: var(--accent); margin-top: 2px;"></p>
+          </div>
+          <button class="icon-btn" id="btn-close-ride-modal" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-lbl">Date</span>
+            <span class="detail-val" id="modal-ride-date">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-lbl">Total Distance</span>
+            <span class="detail-val" id="modal-ride-dist">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-lbl">Start Odometer</span>
+            <span class="detail-val" id="modal-ride-start-km">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-lbl">End Odometer</span>
+            <span class="detail-val" id="modal-ride-end-km">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-lbl">Fuel Consumed</span>
+            <span class="detail-val" id="modal-ride-fuel">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-lbl">Fuel Price</span>
+            <span class="detail-val" id="modal-ride-price">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-lbl">Mileage</span>
+            <span class="detail-val" id="modal-ride-mileage" style="color: var(--accent);">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-lbl">Total Fuel Cost</span>
+            <span class="detail-val" id="modal-ride-cost">-</span>
+          </div>
+          <div class="detail-item" style="grid-column: span 2;">
+            <span class="detail-lbl">Cost Per KM</span>
+            <span class="detail-val" id="modal-ride-cost-km">-</span>
+          </div>
+        </div>
+
+        <!-- View Route Button -->
+        <button class="btn btn-secondary" id="btn-view-route-map" style="display: none; margin-bottom: 14px; gap: 8px;">
+          <span>🗺️ See route on map</span>
+        </button>
+
+        <div id="modal-ride-notes-container" style="display: none;">
+          <div class="form-label">Notes</div>
+          <div class="detail-notes" id="modal-ride-notes"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button class="btn btn-secondary" id="btn-edit-ride-modal">Edit ride</button>
+          <button class="btn btn-danger" id="btn-delete-ride-modal">Delete ride</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW ROUTE MAP MODAL                       -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-route-map">
+      <div class="modal-content" style="max-height: 90vh;">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="route-map-title">Route preview</h3>
+            <p id="route-map-subtitle" style="font-size: 0.82rem; color: var(--accent); margin-top: 2px;"></p>
+          </div>
+          <button class="icon-btn" id="btn-close-route-map-modal" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div id="route-map-stats" style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 12px; background: var(--bg-secondary); padding: 8px 12px; border-radius: var(--radius-sm);"></div>
+
+        <div id="view-route-map-container" style="width: 100%; height: 360px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ADD/EDIT MOTORCYCLE MODAL                  -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-bike-form">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="modal-bike-title">Add a ride</h3>
+            <p id="modal-bike-subtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Tell us a little about it and we'll take care of the rest.</p>
+          </div>
+          <button class="icon-btn" id="btn-close-bike-modal" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <form id="form-motorcycle">
+          <div class="form-group">
+            <label class="form-label" for="input-bike-name">Motorcycle nickname or model *</label>
+            <input type="text" id="input-bike-name" class="form-input" placeholder="e.g. Hunter 350 or My Daily Commuter" required="">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="input-bike-make">Brand</label>
+              <input type="text" id="input-bike-make" class="form-input" placeholder="e.g. Royal Enfield">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-bike-model">Model</label>
+              <input type="text" id="input-bike-model" class="form-input" placeholder="e.g. Hunter 350 Dapper">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="input-bike-year">Year</label>
+              <input type="number" id="input-bike-year" class="form-input" placeholder="2023">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-bike-cc">Engine size</label>
+              <input type="text" id="input-bike-cc" class="form-input" placeholder="e.g. 349 cc">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="input-bike-odo">Current odometer (km)</label>
+              <input type="number" id="input-bike-odo" class="form-input" placeholder="12500">
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Keep this updated so your service reminders stay accurate.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-bike-reg">Registration number</label>
+              <input type="text" id="input-bike-reg" class="form-input" placeholder="e.g. WB-02-AK-1234">
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Helps tell your bikes apart in your garage.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-bike-purchased">When did you get it? (optional)</label>
+            <input type="date" id="input-bike-purchased" class="form-input">
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-submit-bike" style="margin-top: 12px;">Save motorcycle</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MAINTENANCE ADD/EDIT MODAL                 -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-maint-form">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-maint-title">Plan a service</h3>
+          <button class="icon-btn" id="btn-close-maint-modal" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <form id="form-maintenance">
+          <div class="form-group">
+            <label class="form-label" for="input-maint-type">Service type *</label>
+            <select id="input-maint-type" class="form-select" required="">
+              <option value="Engine Oil">Engine Oil</option>
+              <option value="Engine Oil &amp; Filter">Engine Oil &amp; Filter</option>
+              <option value="Oil Filter">Oil Filter</option>
+              <option value="Air Filter">Air Filter</option>
+              <option value="Brake Pads">Brake Pads</option>
+              <option value="Chain Service">Chain Service</option>
+              <option value="Tyres">Tyres</option>
+              <option value="Spark Plug">Spark Plug</option>
+              <option value="General Service">General Service</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="input-maint-current-km">Last serviced at (km) *</label>
+              <input type="number" id="input-maint-current-km" class="form-input" placeholder="10000" required="">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="input-maint-interval-km">Service interval (km)</label>
+              <input type="number" id="input-maint-interval-km" class="form-input" placeholder="3000">
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Usually based on your manufacturer's recommended interval.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-maint-next-km">Next service due at (km) *</label>
+            <input type="number" id="input-maint-next-km" class="form-input" placeholder="13000" required="">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="input-maint-date">Last service date</label>
+              <input type="date" id="input-maint-date" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-maint-next-date">Target date (optional)</label>
+              <input type="date" id="input-maint-next-date" class="form-input">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-maint-notes">Notes (optional)</label>
+            <textarea id="input-maint-notes" class="form-textarea" rows="2" placeholder="e.g. 10W-50 Motul 7100 Fully Synthetic"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-submit-maint" style="margin-top: 12px;">Save service</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- QUICK SERVICE MODAL                        -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-quick-service">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Quick service reminder</h3>
+          <button class="icon-btn" id="btn-close-quick-service" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <form id="form-quick-service">
+          <div class="form-group">
+            <label class="form-label" for="quick-service-type">Service type</label>
+            <select id="quick-service-type" class="form-select" required="">
+              <option value="Engine Oil">Engine Oil</option>
+              <option value="Chain Service">Chain Service</option>
+              <option value="Brake Pads">Brake Pads</option>
+              <option value="Air Filter">Air Filter</option>
+              <option value="General Service">General Service</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="quick-service-odo">Current mileage (km)</label>
+              <input type="number" id="quick-service-odo" class="form-input" required="">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="quick-service-interval">Interval (km)</label>
+              <input type="number" id="quick-service-interval" class="form-input" value="3000" required="">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="quick-service-date">Service date</label>
+            <input type="date" id="quick-service-date" class="form-input">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Save service reminder</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SETTINGS & DEMO DATA MODAL                 -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-settings">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Settings &amp; preferences</h3>
+          <button class="icon-btn" id="btn-close-settings-modal" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-settings-user">Rider Name</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="input-settings-user" class="form-input" placeholder="e.g. Rajarshee">
+            <button class="btn btn-secondary btn-sm" id="btn-save-user-name" style="width: auto; white-space: nowrap;">Save name</button>
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Used for your contextual greetings.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-settings-bike">Active Ride Nickname</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="input-settings-bike" class="form-input" placeholder="e.g. Hunter 350">
+            <button class="btn btn-secondary btn-sm" id="btn-save-bike-name" style="width: auto; white-space: nowrap;">Save ride name</button>
+          </div>
+        </div>
+
+        <!-- Theme / Appearance Selector -->
+        <div class="theme-selector-wrap" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+            <label class="form-label" style="margin-bottom: 0; font-size: 0.92rem; font-weight: 700;">Appearance &amp; Theme</label>
+            <span style="font-size: 0.72rem; color: var(--text-secondary);">4 Automotive Themes</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px;">Choose a high-contrast theme suited for your garage &amp; touring conditions.</p>
+
+          <script>
+            // Bulletproof inline theme switcher handler
+            window.setAppTheme = window.setAppTheme || function(themeName) {
+              if (window.applyTheme) {
+                window.applyTheme(themeName, true);
+              } else {
+                document.documentElement.setAttribute('data-theme', themeName);
+                try { localStorage.setItem('ridelog_theme', themeName); } catch(e){}
+                document.querySelectorAll('#theme-selector-options .theme-card-option').forEach(function(btn) {
+                  if (btn.getAttribute('data-theme') === themeName) {
+                    btn.classList.add('active');
+                  } else {
+                    btn.classList.remove('active');
+                  }
+                });
+              }
+            };
+          </script>
+
+          <div class="theme-selector-grid" id="theme-selector-options">
+            <!-- Theme 1: Obsidian Blue -->
+            <button type="button" class="theme-card-option" data-theme="obsidian" title="Obsidian + Electric Blue" onclick="window.setAppTheme &amp;&amp; window.setAppTheme('obsidian')">
+              <div class="theme-card-top">
+                <div class="theme-swatches">
+                  <div class="theme-swatch-dot" style="background: #0B0F14;" title="Background"></div>
+                  <div class="theme-swatch-dot" style="background: #111821;" title="Surface"></div>
+                  <div class="theme-swatch-dot" style="background: #3B82F6;" title="Primary Blue"></div>
+                </div>
+                <div class="theme-check-badge">✓</div>
+              </div>
+              <div class="theme-card-title">Obsidian Blue</div>
+              <div class="theme-card-desc">Futuristic &amp; technical dashboard</div>
+            </button>
+
+            <!-- Theme 2: Graphite Lime -->
+            <button type="button" class="theme-card-option" data-theme="graphite" title="Graphite + Lime" onclick="window.setAppTheme &amp;&amp; window.setAppTheme('graphite')">
+              <div class="theme-card-top">
+                <div class="theme-swatches">
+                  <div class="theme-swatch-dot" style="background: #101211;" title="Background"></div>
+                  <div class="theme-swatch-dot" style="background: #171A18;" title="Surface"></div>
+                  <div class="theme-swatch-dot" style="background: #A3E635;" title="Primary Lime"></div>
+                </div>
+                <div class="theme-check-badge">✓</div>
+              </div>
+              <div class="theme-card-title">Graphite Lime</div>
+              <div class="theme-card-desc">Sporty track &amp; performance</div>
+            </button>
+
+            <!-- Theme 3: Midnight Cyan -->
+            <button type="button" class="theme-card-option" data-theme="midnight" title="Midnight Navy + Cyan" onclick="window.setAppTheme &amp;&amp; window.setAppTheme('midnight')">
+              <div class="theme-card-top">
+                <div class="theme-swatches">
+                  <div class="theme-swatch-dot" style="background: #07111F;" title="Background"></div>
+                  <div class="theme-swatch-dot" style="background: #0D1B2A;" title="Surface"></div>
+                  <div class="theme-swatch-dot" style="background: #06B6D4;" title="Primary Cyan"></div>
+                </div>
+                <div class="theme-check-badge">✓</div>
+              </div>
+              <div class="theme-card-title">Midnight Cyan</div>
+              <div class="theme-card-desc">Clean SaaS platform aesthetic</div>
+            </button>
+
+            <!-- Theme 4: Carbon Orange -->
+            <button type="button" class="theme-card-option" data-theme="carbon" title="Carbon + Orange" onclick="window.setAppTheme &amp;&amp; window.setAppTheme('carbon')">
+              <div class="theme-card-top">
+                <div class="theme-swatches">
+                  <div class="theme-swatch-dot" style="background: #0C0C0D;" title="Background"></div>
+                  <div class="theme-swatch-dot" style="background: #151516;" title="Surface"></div>
+                  <div class="theme-swatch-dot" style="background: #F97316;" title="Primary Orange"></div>
+                </div>
+                <div class="theme-check-badge">✓</div>
+              </div>
+              <div class="theme-card-title">Carbon Orange</div>
+              <div class="theme-card-desc">Bold mechanical motorsport</div>
+            </button>
+          </div>
+        </div>
+
+        <div style="margin: 24px 0 16px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+          <h4 style="font-size: 0.95rem; margin-bottom: 6px;">Sample rides &amp; garage</h4>
+          <p style="font-size: 0.8rem; margin-bottom: 14px;">Populate sample rides, routes, and realistic maintenance schedules to explore the app.</p>
+          <button class="btn btn-secondary" id="btn-load-demo-data" style="margin-bottom: 12px;">
+            Load sample data
+          </button>
+          <button class="btn btn-danger" id="btn-clear-all-data">
+            Reset all data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- QUICK UPDATE ODOMETER MODAL                -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-update-odo">
+      <div class="modal-content" style="max-width: 440px;">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">Update Odometer</h3>
+            <p style="font-size: 0.8rem; color: #64748B; margin-top: 2px;">Enter your latest odometer reading for accurate reminders.</p>
+          </div>
+          <button class="icon-btn" id="btn-close-update-odo" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <form id="form-update-odo">
+          <div class="form-group">
+            <label class="form-label" for="input-quick-odo">Current Reading (km) *</label>
+            <input type="number" id="input-quick-odo" class="form-input" min="0" step="1" required="" style="font-size: 1.1rem; font-weight: 700;">
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 16px;">
+            <button type="submit" class="btn btn-primary" style="font-weight: 700;">Save Odometer</button>
+            <button type="button" class="btn btn-secondary" id="btn-cancel-update-odo">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div> <!-- End app-container -->
+
+  <!-- Main JavaScript App Entry (ES6 Module) -->
+  <script type="module" src="js/app.js"></script>
+
+
+</body></html>

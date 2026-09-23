@@ -1,0 +1,301 @@
+/* =========================================================
+   CENTRAL DESIGN TOKENS & FIGMA DESIGN SYSTEM
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* Global Metrics & Radii (Universal across all themes) */
+:root {
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.7);
+
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --app-max-width: 480px;
+  --nav-height: 72px;
+  --header-height: 64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --sidebar-width: 240px;
+  --sidebar-width-compact: 76px;
+  --topbar-height: 68px;
+}
+
+/* ---------------------------------------------------------
+   MIDNIGHT NAVY + CYAN THEME (Permanent Universal Theme)
+   Sleek personal motorcycle companion aesthetic
+   --------------------------------------------------------- */
+:root,
+[data-theme] {
+  --background: #07111F;
+  --surface: #0D1B2A;
+  --surface-elevated: #14263A;
+  --primary: #06B6D4;
+  --primary-hover: #0891B2;
+  --primary-contrast: #FFFFFF;
+  --secondary-accent: #22D3EE;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-subtle: #64748B;
+  --border: #1E293B;
+  --border-subtle: #1E293B;
+  --border-medium: #334E68;
+  --border-active: rgba(6, 182, 212, 0.45);
+
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.14);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.14);
+  --danger: #EF4444;
+  --danger-bg: rgba(239, 68, 68, 0.16);
+  --info: #06B6D4;
+  --info-bg: rgba(6, 182, 212, 0.14);
+
+  --accent-glow: rgba(6, 182, 212, 0.28);
+  --accent-subtle: rgba(6, 182, 212, 0.14);
+  --bg-glass: rgba(13, 27, 42, 0.94);
+
+  /* Semantic Compatibility Aliases */
+  --bg-primary: var(--background);
+  --bg-secondary: var(--surface);
+  --bg-tertiary: var(--surface-elevated);
+  --bg-card: var(--surface);
+  --bg-card-hover: var(--surface-elevated);
+  --text-main: var(--text-primary);
+  --text-muted: var(--text-secondary);
+  --accent: var(--primary);
+  --accent-light: var(--secondary-accent);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--background);
+  color: var(--text-primary);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* App Container - Mobile default: fluid full-width mobile container */
+#app-container {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px);
+}
+
+/* Typography Helpers */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+p {
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-subtle);
+}
+
+/* Mobile Layout Wrappers */
+#desktop-main-wrapper {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+#desktop-content-area {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: 1;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Screen Sections */
+.app-screen {
+  display: none;
+  padding: 16px 16px 84px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.app-screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE UTILITIES & DESKTOP ARCHITECTURE
+   ========================================================= */
+
+/* Desktop-only elements hidden by default on mobile (< 768px) */
+#desktop-sidebar,
+#desktop-topbar,
+.desktop-only {
+  display: none !important;
+}
+
+.mobile-only {
+  display: flex !important;
+}
+
+/* TABLET & UP (768px - 1023px) */
+@media (min-width: 768px) {
+  body {
+    background-color: var(--bg-primary);
+    overflow-x: hidden;
+  }
+
+  /* Expand app-container to full width desktop layout */
+  #app-container {
+    max-width: 100%;
+    width: 100%;
+    min-height: 100vh;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 0;
+  }
+
+  /* Hide mobile elements */
+  .app-header,
+  .bottom-nav,
+  .mobile-only {
+    display: none !important;
+  }
+
+  /* Show desktop navigation & topbar */
+  #desktop-sidebar {
+    display: flex !important;
+  }
+
+  #desktop-topbar,
+  .desktop-only {
+    display: flex !important;
+  }
+
+  #desktop-main-wrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  #desktop-content-area {
+    flex: 1;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 24px 28px 48px;
+    overflow-y: auto;
+  }
+
+  .app-screen {
+    padding: 0;
+    max-width: 100%;
+  }
+}
+
+/* LAPTOP BREAKPOINT (1024px - 1199px) */
+@media (min-width: 1024px) {
+  #desktop-content-area {
+    padding: 28px 36px 56px;
+  }
+}
+
+/* DESKTOP BREAKPOINT (1200px+) */
+@media (min-width: 1200px) {
+  #desktop-content-area {
+    padding: 32px 42px 64px;
+  }
+}
+
+/* Public Route Layout (Landing, Login, Signup) */
+body.is-public-route #desktop-sidebar,
+body.is-public-route #desktop-topbar,
+body.is-public-route .app-header,
+body.is-public-route .bottom-nav {
+  display: none !important;
+}
+
+body.is-public-route #desktop-main-wrapper {
+  margin-left: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+body.is-public-route #desktop-content-area {
+  padding: 40px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+

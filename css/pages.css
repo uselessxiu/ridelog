@@ -1,0 +1,638 @@
+/* Section headers in pages */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0 12px;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.2px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: opacity 0.15s;
+}
+
+.link-btn:hover {
+  opacity: 0.85;
+}
+
+/* Dashboard Specifics */
+.alert-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(26, 30, 39, 0.9), rgba(33, 38, 49, 0.7));
+  border-left: 4px solid var(--accent);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  border-top: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.alert-card.alert-danger {
+  border-left-color: var(--danger);
+  background: linear-gradient(135deg, rgba(40, 15, 15, 0.6), rgba(26, 30, 39, 0.8));
+}
+
+.alert-card.alert-success {
+  border-left-color: var(--success);
+}
+
+.alert-info-title {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.alert-info-desc {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-top: 2px;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  margin-top: 8px;
+}
+
+/* Header Bike Switcher Dropdown */
+.bike-switcher-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.btn-bike-switcher {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s ease;
+}
+
+.btn-bike-switcher:hover {
+  background: var(--bg-tertiary);
+}
+
+.bike-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  width: 220px;
+  z-index: 150;
+  display: none;
+  overflow: hidden;
+  animation: slideDown 0.18s ease-out;
+}
+
+.bike-dropdown.active {
+  display: block;
+}
+
+.bike-dropdown-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.bike-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.bike-dropdown-item:hover {
+  background: var(--bg-secondary);
+}
+
+.bike-dropdown-item.active {
+  background: var(--accent-subtle);
+}
+
+/* Garage Screen */
+.garage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bike-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.bike-card.active-bike-card {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.bike-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bike-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bike-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.bike-card-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.bike-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+}
+
+.bike-stat-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.bike-stat-lbl {
+  font-size: 0.68rem;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+}
+
+.bike-stat-val {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Interactive Map in Add Ride */
+.map-container {
+  width: 100%;
+  height: 220px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Rides List & Cards */
+.rides-list, .maintenance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ride-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ride-card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.ride-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.ride-name {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.ride-date {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+  font-weight: 500;
+}
+
+.ride-route {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.ride-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.ride-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.ride-stat-lbl {
+  font-size: 0.68rem;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+}
+
+.ride-stat-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Ride History Filter & Search Bar */
+.search-filter-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.search-input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-box svg {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  color: var(--text-subtle);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+.filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.filter-select {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  background: var(--bg-secondary);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+/* Maintenance Cards */
+.maint-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.maint-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.maint-type {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.maint-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.maint-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+/* Detail Modal Grid */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  background: var(--bg-secondary);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-lbl {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.detail-val {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 2px;
+}
+
+.detail-notes {
+  background: var(--bg-secondary);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  border-left: 3px solid var(--accent);
+}
+
+/* =========================================================
+   DESKTOP RESPONSIVE PAGES & GRID SYSTEM
+   ========================================================= */
+
+/* Dashboard Hero Banner */
+.dash-hero-banner {
+  display: none; /* hidden on mobile */
+  background: linear-gradient(135deg, var(--surface), var(--surface-elevated));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.dash-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary), var(--secondary-accent));
+}
+
+.dash-hero-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.dash-hero-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.dash-hero-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.dash-hero-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Dashboard Desktop 2-Column Grid */
+.dash-desktop-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .dash-hero-banner {
+    display: block;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    padding: 18px 20px;
+  }
+
+  .stat-value {
+    font-size: 1.65rem;
+  }
+
+  .dash-desktop-grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .dash-col-primary {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .dash-col-secondary {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .chart-container {
+    height: 270px;
+  }
+}
+
+/* Garage Desktop Grid */
+.garage-fleet-summary {
+  display: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .garage-fleet-summary {
+    display: grid;
+  }
+
+  .garage-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .garage-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+/* Add Ride 2-Column Split Layout on Desktop */
+.add-ride-desktop-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .add-ride-desktop-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .add-ride-map-col .map-container {
+    height: 380px;
+  }
+}
+
+/* Maintenance Desktop Layout */
+.maintenance-desktop-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.maintenance-stat-strip {
+  display: none;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .maintenance-stat-strip {
+    display: grid;
+  }
+}
+
+@media (min-width: 1024px) {
+  .maintenance-desktop-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+}
+
+/* Ride History Desktop Grid */
+@media (min-width: 1024px) {
+  #rides-history-list .rides-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
