@@ -13,7 +13,8 @@ import { storage } from './storage.js';
 import { vehicleService } from './services/vehicles.js';
 import { maintenanceService } from './services/maintenance.js';
 import { authService } from './services/auth.js';
-import { generateId, formatNumber, formatDate, getTodayDateString, showToast } from './utils.js';
+import { generateId, formatNumber, formatDate, getTodayDateString, showToast, getIconSvg } from './utils.js';
+import { openQuickOdoModal } from './dashboard.js';
 
 let currentEditingMaintId = null;
 
@@ -135,6 +136,31 @@ export function renderMaintenance(navigateToTab) {
   const upcomingList = evaluatedRecords.filter(r => !r.isOverdue);
   const overdueList = evaluatedRecords.filter(r => r.isOverdue);
 
+  // Update Primary Status Banner
+  const bannerTitle = document.getElementById('maint-banner-title');
+  const bannerSub = document.getElementById('maint-banner-sub');
+  if (bannerTitle && bannerSub) {
+    if (overdueList.length > 0) {
+      bannerTitle.textContent = `${overdueList[0].humanTitle.toUpperCase()} // OVERDUE BY ${formatNumber(Math.abs(overdueList[0].remainingKm))} KM`;
+      bannerSub.textContent = `Was due at ${formatNumber(overdueList[0].nextServiceKm)} km · Immediate service required for ${activeBike.name}`;
+    } else if (upcomingList.length > 0) {
+      bannerTitle.textContent = `NEXT SERVICE // ${formatNumber(upcomingList[0].remainingKm)} KM REMAINING`;
+      bannerSub.textContent = `Due at ${formatNumber(upcomingList[0].nextServiceKm)} km · ${upcomingList[0].humanTitle} for ${activeBike.name}`;
+    } else {
+      bannerTitle.textContent = `MAINTENANCE LOG // ALL SYSTEMS NOMINAL`;
+      bannerSub.textContent = `All scheduled service intervals for ${activeBike.name} are up to date.`;
+    }
+  }
+
+  // Wire Odometer Calibration Button
+  const odoBtn = document.getElementById('btn-maint-update-odo');
+  if (odoBtn && !odoBtn._bound) {
+    odoBtn._bound = true;
+    odoBtn.addEventListener('click', () => {
+      openQuickOdoModal(activeBike, navigateToTab);
+    });
+  }
+
   // Update counts on pill tabs
   const tabUpcoming = document.getElementById('tab-maint-upcoming');
   const tabOverdue = document.getElementById('tab-maint-overdue');
@@ -150,68 +176,87 @@ export function renderMaintenance(navigateToTab) {
   const getTaskVisuals = (task) => {
     const type = (task.type || '').toLowerCase();
     if (type.includes('oil')) {
-      return { icon: '🛢️', color: 'amber' };
+      return { iconSvg: getIconSvg('oil', 18), color: 'amber' };
     } else if (type.includes('chain')) {
-      return { icon: '⛓️', color: 'blue' };
+      return { iconSvg: getIconSvg('chain', 18), color: 'green' };
     } else if (type.includes('brake')) {
-      return { icon: '🛑', color: 'blue' };
+      return { iconSvg: getIconSvg('brake', 18), color: 'blue' };
     } else if (type.includes('tyre') || type.includes('tire')) {
-      return { icon: '🔘', color: 'green' };
+      return { iconSvg: getIconSvg('tyre', 18), color: 'blue' };
+    } else if (type.includes('spark')) {
+      return { iconSvg: getIconSvg('spark', 18), color: 'amber' };
     } else {
-      return { icon: '🔧', color: 'blue' };
+      return { iconSvg: getIconSvg('wrench', 18), color: 'blue' };
     }
   };
 
   if (activeMaintFilter === 'upcoming') {
     if (upcomingList.length === 0) {
       container.innerHTML = `
-        <div style="background: #13161C; border: 1px solid #1E232E; border-radius: 16px; padding: 36px 20px; text-align: center; color: #64748B;">
-          <div style="font-size: 2.2rem; margin-bottom: 8px;">🎉</div>
-          <div style="font-weight: 700; font-size: 1.15rem; color: #FFFFFF; margin-bottom: 4px;">Nothing coming up</div>
-          <div style="font-size: 0.85rem; margin-bottom: 16px;">You're all caught up for now. We'll let you know when something needs care.</div>
-          <button class="btn btn-primary btn-sm" id="btn-empty-add-maint" style="width: auto;">+ Plan service</button>
+        <div style="background: #0B101D; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 48px 24px; text-align: center; color: #64748B;">
+          <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16, 185, 129, 0.12); color: #10B981; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+            ${getIconSvg('check', 26)}
+          </div>
+          <div style="font-weight: 800; font-size: 1.25rem; color: #FFFFFF; margin-bottom: 6px; letter-spacing: -0.01em;">All Systems Nominal</div>
+          <div style="font-size: 0.88rem; color: #94A3B8; margin-bottom: 20px; max-width: 440px; margin-left: auto; margin-right: auto;">Scheduled intervals for ${activeBike.name} are fully satisfied. Record future servicing or adjust intervals below.</div>
+          <button class="btn-cockpit-primary" id="btn-empty-add-maint" style="margin: 0 auto;">+ Plan Service</button>
         </div>
       `;
       document.getElementById('btn-empty-add-maint')?.addEventListener('click', () => openMaintModal());
       return;
     }
 
-    container.innerHTML = upcomingList.map(item => {
+    container.innerHTML = upcomingList.map((item, idx) => {
       const visuals = getTaskVisuals(item);
       const interval = Number(item.serviceIntervalKm || item.intervalKm) || 3000;
       const progressPercent = Math.min(100, Math.max(10, Math.round(((interval - Math.max(0, item.remainingKm)) / interval) * 100)));
       let colorClass = visuals.color;
-      if (item.remainingKm <= 500) colorClass = 'amber';
+      let statusText = 'Normal';
+      if (item.remainingKm <= 500) {
+        colorClass = 'amber';
+        statusText = 'Due Soon';
+      }
+
+      const code = String(idx + 1).padStart(2, '0');
+      const title = item.humanTitle || item.type;
 
       return `
-        <div class="task-card-figma" data-id="${item.id}">
-          <div class="task-header-row">
-            <div class="task-left-wrap">
-              <div class="task-icon-box ${colorClass}">
-                <span>${visuals.icon}</span>
-              </div>
-              <div>
-                <div class="task-name">${item.humanTitle || item.type}</div>
-                <div class="task-bike-name">${activeBike.name}</div>
-              </div>
+        <div class="telemetry-timeline-row" data-id="${item.id}">
+          <div class="telemetry-comp-block">
+            <div class="telemetry-comp-icon-box ${colorClass}">
+              ${visuals.iconSvg}
             </div>
-            <div class="task-dist-wrap">
-              <div class="task-dist-val ${colorClass}">${formatNumber(Math.max(0, item.remainingKm))} km</div>
-              <div class="task-dist-lbl">away</div>
+            <div>
+              <div class="telemetry-comp-title">${code} // ${title.toUpperCase()}</div>
+              <div class="telemetry-comp-sub">${activeBike.name} · Every ${formatNumber(interval)} km</div>
             </div>
           </div>
 
-          <div class="task-progress-bar">
-            <div class="task-progress-fill ${colorClass}" style="width: ${progressPercent}%;"></div>
+          <div class="telemetry-dist-block">
+            <span class="telemetry-dist-val tabular-nums ${colorClass}">${formatNumber(Math.max(0, item.remainingKm))} km</span>
+            <span class="telemetry-dist-lbl">${item.statusText}</span>
           </div>
 
-          <div class="task-footer-row">
-            <span class="task-due-text">Due in ${formatNumber(Math.max(0, item.remainingKm))} km · at ${formatNumber(item.nextServiceKm)} km</span>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-plan-service btn-maint-done" data-id="${item.id}" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">Mark done</button>
-              <button class="btn-plan-service btn-maint-edit" data-id="${item.id}">Edit</button>
-              <button class="btn-plan-service btn-maint-delete" data-id="${item.id}" style="color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">Delete</button>
+          <div class="telemetry-gauge-wrap">
+            <div class="telemetry-gauge-bar">
+              <div class="telemetry-gauge-fill ${colorClass}" style="width: ${progressPercent}%;"></div>
             </div>
+          </div>
+
+          <div>
+            <span class="telemetry-status-pill ${colorClass}">${statusText}</span>
+          </div>
+
+          <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
+            <button class="btn-cockpit-primary btn-maint-done" data-id="${item.id}" style="padding: 7px 12px; font-size: 0.74rem;">
+              Mark Done
+            </button>
+            <button class="btn-cockpit-outline btn-maint-edit" data-id="${item.id}" style="padding: 7px 12px; font-size: 0.74rem;">
+              Edit
+            </button>
+            <button class="btn-cockpit-outline btn-maint-delete" data-id="${item.id}" style="padding: 7px 10px; font-size: 0.74rem; color: #EF4444; border-color: rgba(239, 68, 68, 0.3);" title="Delete service">
+              ✕
+            </button>
           </div>
         </div>
       `;
@@ -220,46 +265,60 @@ export function renderMaintenance(navigateToTab) {
   } else if (activeMaintFilter === 'overdue') {
     if (overdueList.length === 0) {
       container.innerHTML = `
-        <div style="background: #13161C; border: 1px solid #1E232E; border-radius: 16px; padding: 36px 20px; text-align: center; color: #64748B;">
-          <div style="font-size: 2.2rem; margin-bottom: 8px;">✨</div>
-          <div style="font-weight: 700; font-size: 1.15rem; color: #FFFFFF; margin-bottom: 4px;">No overdue tasks</div>
-          <div style="font-size: 0.85rem;">All scheduled maintenance for ${activeBike.name} is on track.</div>
+        <div style="background: #0B101D; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 48px 24px; text-align: center; color: #64748B;">
+          <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16, 185, 129, 0.12); color: #10B981; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+            ${getIconSvg('check', 26)}
+          </div>
+          <div style="font-weight: 800; font-size: 1.25rem; color: #FFFFFF; margin-bottom: 6px;">Zero Overdue Alerts</div>
+          <div style="font-size: 0.88rem; color: #94A3B8;">All scheduled service points for ${activeBike.name} are currently within tolerance.</div>
         </div>
       `;
       return;
     }
 
-    container.innerHTML = overdueList.map(item => {
+    container.innerHTML = overdueList.map((item, idx) => {
       const visuals = getTaskVisuals(item);
+      const interval = Number(item.serviceIntervalKm || item.intervalKm) || 3000;
+      const code = String(idx + 1).padStart(2, '0');
+      const title = item.humanTitle || item.type;
+
       return `
-        <div class="task-card-figma" data-id="${item.id}" style="border-color: #EF4444;">
-          <div class="task-header-row">
-            <div class="task-left-wrap">
-              <div class="task-icon-box red">
-                <span>${visuals.icon}</span>
-              </div>
-              <div>
-                <div class="task-name">${item.humanTitle || item.type}</div>
-                <div class="task-bike-name">${activeBike.name}</div>
-              </div>
+        <div class="telemetry-timeline-row" data-id="${item.id}" style="border-left: 3px solid #EF4444;">
+          <div class="telemetry-comp-block">
+            <div class="telemetry-comp-icon-box red">
+              ${visuals.iconSvg}
             </div>
-            <div class="task-dist-wrap">
-              <div class="task-dist-val red">${formatNumber(Math.abs(item.remainingKm))} km</div>
-              <div class="task-dist-lbl" style="color: #EF4444;">overdue</div>
+            <div>
+              <div class="telemetry-comp-title" style="color: #EF4444;">${code} // ${title.toUpperCase()}</div>
+              <div class="telemetry-comp-sub">${activeBike.name} · Every ${formatNumber(interval)} km</div>
             </div>
           </div>
 
-          <div class="task-progress-bar">
-            <div class="task-progress-fill red" style="width: 100%;"></div>
+          <div class="telemetry-dist-block">
+            <span class="telemetry-dist-val tabular-nums red">${formatNumber(Math.abs(item.remainingKm))} km</span>
+            <span class="telemetry-dist-lbl" style="color: #EF4444;">Overdue</span>
           </div>
 
-          <div class="task-footer-row">
-            <span class="task-due-text" style="color: #EF4444;">Overdue by ${formatNumber(Math.abs(item.remainingKm))} km · was due at ${formatNumber(item.nextServiceKm)} km</span>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-plan-service btn-maint-done" data-id="${item.id}" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">Mark done</button>
-              <button class="btn-plan-service btn-maint-edit" data-id="${item.id}">Edit</button>
-              <button class="btn-plan-service btn-maint-delete" data-id="${item.id}" style="color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">Delete</button>
+          <div class="telemetry-gauge-wrap">
+            <div class="telemetry-gauge-bar">
+              <div class="telemetry-gauge-fill red" style="width: 100%;"></div>
             </div>
+          </div>
+
+          <div>
+            <span class="telemetry-status-pill red">OVERDUE</span>
+          </div>
+
+          <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
+            <button class="btn-cockpit-primary btn-maint-done" data-id="${item.id}" style="background: #EF4444; border-color: #EF4444; padding: 7px 12px; font-size: 0.74rem;">
+              Mark Done
+            </button>
+            <button class="btn-cockpit-outline btn-maint-edit" data-id="${item.id}" style="padding: 7px 12px; font-size: 0.74rem;">
+              Edit
+            </button>
+            <button class="btn-cockpit-outline btn-maint-delete" data-id="${item.id}" style="padding: 7px 10px; font-size: 0.74rem; color: #EF4444; border-color: rgba(239, 68, 68, 0.3);" title="Delete service">
+              ✕
+            </button>
           </div>
         </div>
       `;
@@ -268,35 +327,42 @@ export function renderMaintenance(navigateToTab) {
   } else if (activeMaintFilter === 'completed') {
     if (history.length === 0) {
       container.innerHTML = `
-        <div style="background: #13161C; border: 1px solid #1E232E; border-radius: 16px; padding: 36px 20px; text-align: center; color: #64748B;">
-          <div style="font-size: 2.2rem; margin-bottom: 8px;">📋</div>
-          <div style="font-weight: 700; font-size: 1.15rem; color: #FFFFFF; margin-bottom: 4px;">No completed services yet</div>
-          <div style="font-size: 0.85rem;">When you mark a service as completed, it will be safely logged here.</div>
+        <div style="background: #0B101D; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 48px 24px; text-align: center; color: #64748B;">
+          <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(59, 130, 246, 0.12); color: #3B82F6; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+            ${getIconSvg('wrench', 26)}
+          </div>
+          <div style="font-weight: 800; font-size: 1.25rem; color: #FFFFFF; margin-bottom: 6px;">No Service Logs Yet</div>
+          <div style="font-size: 0.88rem; color: #94A3B8;">Completed maintenance actions will be logged in this ledger with date and odometer records.</div>
         </div>
       `;
       return;
     }
 
-    container.innerHTML = history.map(item => {
+    container.innerHTML = history.map((item, idx) => {
+      const code = String(idx + 1).padStart(2, '0');
       return `
-        <div class="task-card-figma" style="border-color: #1E232E;">
-          <div class="task-header-row">
-            <div class="task-left-wrap">
-              <div class="task-icon-box green">
-                <span>✓</span>
-              </div>
-              <div>
-                <div class="task-name">${item.type}</div>
-                <div class="task-bike-name">${activeBike.name} · Completed at ${formatNumber(item.completedKm)} km</div>
-              </div>
+        <div class="telemetry-timeline-row" data-id="${item.id}">
+          <div class="telemetry-comp-block">
+            <div class="telemetry-comp-icon-box green">
+              ${getIconSvg('check', 16)}
             </div>
-            <div class="task-dist-wrap">
-              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; font-weight: 700; padding: 4px 10px; border-radius: 999px;">✓ Done</span>
+            <div>
+              <div class="telemetry-comp-title">${code} // ${item.type.toUpperCase()}</div>
+              <div class="telemetry-comp-sub">${activeBike.name} · Completed at ${formatNumber(item.completedKm)} km</div>
             </div>
           </div>
 
-          <div class="task-footer-row" style="margin-top: 6px;">
-            <span class="task-due-text">${formatDate(item.completedDate)}${item.notes ? ` · ${item.notes}` : ''}</span>
+          <div class="telemetry-dist-block">
+            <span class="telemetry-dist-val tabular-nums green">${formatDate(item.completedDate)}</span>
+            <span class="telemetry-dist-lbl">Logged Date</span>
+          </div>
+
+          <div style="flex: 1; font-size: 0.78rem; color: #94A3B8; padding: 0 12px;">
+            ${item.notes ? item.notes : 'Routine service completed and verified.'}
+          </div>
+
+          <div>
+            <span class="telemetry-status-pill green">COMPLETED</span>
           </div>
         </div>
       `;
@@ -522,10 +588,10 @@ function handleMaintSubmit(navigateToTab) {
 
   if (currentEditingMaintId) {
     maintenanceService.updateMaintenanceScheduleItem(currentEditingMaintId, payload);
-    showToast('Service details updated ✓', 'success');
+    showToast('Service details updated', 'success');
   } else {
     maintenanceService.addMaintenanceScheduleItem(payload);
-    showToast("Service planned! We'll remind you when it's getting close ✓", 'success');
+    showToast("Service planned! We'll remind you when it's getting close", 'success');
   }
 
   closeMaintModal();
@@ -592,7 +658,7 @@ function handleSmartMarkComplete(id, currentOdo, navigateToTab) {
 
   maintenanceService.updateMaintenanceScheduleItem(item.id, item);
 
-  showToast('Marked as done! Kept your service history updated 🎉', 'success');
+  showToast('Marked as completed! Logged to service history', 'success');
   renderMaintenance(navigateToTab);
 }
 
@@ -654,7 +720,7 @@ function setupQuickServiceModal(navigateToTab) {
       });
 
       if (modal) modal.classList.remove('active');
-      showToast(`Added ${type} reminder ✓`, 'success');
+      showToast(`Added ${type} reminder`, 'success');
       navigateToTab('dashboard');
     });
   }

@@ -1,65 +1,108 @@
 /* =========================================================
-   CENTRAL DESIGN TOKENS & FIGMA DESIGN SYSTEM
+   RIDELOG BRAND KIT & TASTE SKILL DESIGN SYSTEM
+   =========================================================
+   Design DNA:
+   - Deep Midnight Slate Canvas (#080C14 / #0A0F1D)
+   - Electric Blue Primary Accent (#2563EB / #3B82F6)
+   - Technical Telemetry & Tabular Numerals (Tactile Instrument Cluster)
+   - Razor-Thin 1px Compartmentalization (rgba(255, 255, 255, 0.08))
+   - Spring Physics Motion & Refined Micro-Interactions
    ========================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* Global Metrics & Radii (Universal across all themes) */
 :root {
+  /* Surface Palette */
+  --background: #080C14;
+  --bg-canvas: #080C14;
+  --surface: #0E1526;
+  --bg-surface: #0E1526;
+  --surface-elevated: #151F36;
+  --bg-surface-elevated: #151F36;
+  --surface-subtle: rgba(255, 255, 255, 0.03);
+
+  /* Primary Brand Accent (Electric Blue) */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-light: #3B82F6;
+  --primary-glow: rgba(37, 99, 235, 0.28);
+  --primary-subtle: rgba(37, 99, 235, 0.12);
+  --primary-contrast: #FFFFFF;
+
+  /* Secondary Accents */
+  --accent-amber: #F59E0B;
+  --accent-amber-subtle: rgba(245, 158, 11, 0.14);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.14);
+
+  --accent-emerald: #10B981;
+  --accent-emerald-subtle: rgba(16, 185, 129, 0.14);
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.14);
+
+  --accent-danger: #EF4444;
+  --accent-danger-subtle: rgba(239, 68, 68, 0.14);
+  --danger: #EF4444;
+  --danger-bg: rgba(239, 68, 68, 0.14);
+
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.14);
+
+  /* Typography Colors */
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-subtle: #475569;
+
+  /* Borders & Dividers */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  --border-active: rgba(37, 99, 235, 0.5);
+
+  /* Glassmorphism Surface */
+  --bg-glass: rgba(10, 15, 29, 0.94);
+
+  /* Typography Stacks */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family: var(--font-sans);
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Spacing Scale */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Radii */
+  --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
+  --radius-2xl: 24px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.7);
+  /* Elevation Shadows */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.7);
+  --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08);
 
-  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --app-max-width: 480px;
-  --nav-height: 72px;
-  --header-height: 64px;
+  /* Layout Metrics */
+  --sidebar-width: 240px;
+  --topbar-height: 68px;
+  --nav-height: 68px;
+  --header-height: 60px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
-  --sidebar-width: 240px;
-  --sidebar-width-compact: 76px;
-  --topbar-height: 68px;
-}
-
-/* ---------------------------------------------------------
-   MIDNIGHT NAVY + CYAN THEME (Permanent Universal Theme)
-   Sleek personal motorcycle companion aesthetic
-   --------------------------------------------------------- */
-:root,
-[data-theme] {
-  --background: #07111F;
-  --surface: #0D1B2A;
-  --surface-elevated: #14263A;
-  --primary: #06B6D4;
-  --primary-hover: #0891B2;
-  --primary-contrast: #FFFFFF;
-  --secondary-accent: #22D3EE;
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-subtle: #64748B;
-  --border: #1E293B;
-  --border-subtle: #1E293B;
-  --border-medium: #334E68;
-  --border-active: rgba(6, 182, 212, 0.45);
-
-  --success: #10B981;
-  --success-bg: rgba(16, 185, 129, 0.14);
-  --warning: #F59E0B;
-  --warning-bg: rgba(245, 158, 11, 0.14);
-  --danger: #EF4444;
-  --danger-bg: rgba(239, 68, 68, 0.16);
-  --info: #06B6D4;
-  --info-bg: rgba(6, 182, 212, 0.14);
-
-  --accent-glow: rgba(6, 182, 212, 0.28);
-  --accent-subtle: rgba(6, 182, 212, 0.14);
-  --bg-glass: rgba(13, 27, 42, 0.94);
+  /* Spring Physics Motion */
+  --motion-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.15s var(--motion-spring);
+  --transition-base: 0.25s var(--motion-spring);
 
   /* Semantic Compatibility Aliases */
   --bg-primary: var(--background);
@@ -68,77 +111,92 @@
   --bg-card: var(--surface);
   --bg-card-hover: var(--surface-elevated);
   --text-main: var(--text-primary);
-  --text-muted: var(--text-secondary);
   --accent: var(--primary);
-  --accent-light: var(--secondary-accent);
+  --accent-light: var(--primary-light);
 }
 
+/* Base Reset & Smooth Rendering */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
 }
 
 body {
-  font-family: var(--font-family);
+  font-family: var(--font-sans);
   background-color: var(--background);
   color: var(--text-primary);
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* App Container - Mobile default: fluid full-width mobile container */
+/* App Container - Responsive App Shell */
 #app-container {
   width: 100%;
   max-width: 100%;
-  min-height: 100vh;
-  background-color: var(--bg-primary);
+  min-height: 100dvh;
+  background-color: var(--bg-canvas);
   display: flex;
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
-  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px);
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
 }
 
-/* Typography Helpers */
+/* Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  color: var(--text-main);
-  font-weight: 600;
-  line-height: 1.25;
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 p {
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 a {
-  color: var(--accent);
+  color: var(--primary-light);
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
-/* Scrollbar Styling */
+a:hover {
+  color: #60A5FA;
+}
+
+/* Tabular numbers for all telemetry and odometers */
+.tabular-nums,
+.metric-val,
+.odometer-val,
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
+  background: var(--surface-elevated);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-subtle);
+  background: var(--text-muted);
 }
 
-/* Mobile Layout Wrappers */
+/* Content Area & Screen Transitions */
 #desktop-main-wrapper {
   width: 100%;
   max-width: 100%;
@@ -148,7 +206,6 @@ a {
   flex: 1;
   position: relative;
   overflow-x: hidden;
-  box-sizing: border-box;
 }
 
 #desktop-content-area {
@@ -156,28 +213,25 @@ a {
   max-width: 100%;
   min-width: 0;
   flex: 1;
-  box-sizing: border-box;
   overflow-x: hidden;
 }
 
-/* Screen Sections */
 .app-screen {
   display: none;
   padding: 16px 16px 84px;
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
-  animation: fadeIn 0.2s ease-in-out;
+  animation: screenFadeIn 0.22s var(--motion-spring);
 }
 
 .app-screen.active {
   display: block;
 }
 
-@keyframes fadeIn {
+@keyframes screenFadeIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -185,11 +239,24 @@ a {
   }
 }
 
+/* Loading Shimmer Skeleton */
+@keyframes shimmerWave {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmerWave 1.8s infinite ease-in-out;
+  border-radius: var(--radius-md);
+}
+
 /* =========================================================
-   RESPONSIVE UTILITIES & DESKTOP ARCHITECTURE
+   RESPONSIVE LAYOUT ENGINE (Mobile vs Desktop)
    ========================================================= */
 
-/* Desktop-only elements hidden by default on mobile (< 768px) */
+/* Mobile-first: Hide desktop sidebar and topbar by default */
 #desktop-sidebar,
 #desktop-topbar,
 .desktop-only {
@@ -200,33 +267,23 @@ a {
   display: flex !important;
 }
 
-/* TABLET & UP (768px - 1023px) */
+/* TABLET & DESKTOP (>= 768px) */
 @media (min-width: 768px) {
-  body {
-    background-color: var(--bg-primary);
-    overflow-x: hidden;
-  }
-
-  /* Expand app-container to full width desktop layout */
   #app-container {
     max-width: 100%;
     width: 100%;
-    min-height: 100vh;
-    border: none;
-    box-shadow: none;
+    min-height: 100dvh;
     display: flex;
     flex-direction: row;
     padding-bottom: 0;
   }
 
-  /* Hide mobile elements */
   .app-header,
   .bottom-nav,
   .mobile-only {
     display: none !important;
   }
 
-  /* Show desktop navigation & topbar */
   #desktop-sidebar {
     display: flex !important;
   }
@@ -241,8 +298,8 @@ a {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--bg-primary);
+    min-height: 100dvh;
+    background-color: var(--background);
     position: relative;
     overflow-x: hidden;
   }
@@ -250,9 +307,9 @@ a {
   #desktop-content-area {
     flex: 1;
     width: 100%;
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 24px 28px 48px;
+    padding: 24px 32px 56px;
     overflow-y: auto;
   }
 
@@ -262,21 +319,21 @@ a {
   }
 }
 
-/* LAPTOP BREAKPOINT (1024px - 1199px) */
+/* LAPTOP (1024px - 1199px) */
 @media (min-width: 1024px) {
   #desktop-content-area {
-    padding: 28px 36px 56px;
+    padding: 28px 40px 64px;
   }
 }
 
-/* DESKTOP BREAKPOINT (1200px+) */
+/* WIDE DESKTOP (1200px+) */
 @media (min-width: 1200px) {
   #desktop-content-area {
-    padding: 32px 42px 64px;
+    padding: 32px 48px 72px;
   }
 }
 
-/* Public Route Layout (Landing, Login, Signup) */
+/* Public Routes (Landing, Login, Signup) */
 body.is-public-route #desktop-sidebar,
 body.is-public-route #desktop-topbar,
 body.is-public-route .app-header,
@@ -296,6 +353,5 @@ body.is-public-route #desktop-content-area {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
-

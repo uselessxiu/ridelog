@@ -1146,13 +1146,13 @@
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: #06B6D4;
+  background: #2563EB;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.35);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
 
 .sidebar-brand-title {
@@ -1200,8 +1200,8 @@
 }
 
 .sidebar-nav-item-figma.active {
-  background: rgba(6, 182, 212, 0.12);
-  color: #06B6D4;
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563EB;
   font-weight: 700;
 }
 
@@ -1213,18 +1213,18 @@
   transform: translateY(-50%);
   width: 3px;
   height: 20px;
-  background: #06B6D4;
+  background: #2563EB;
   border-radius: 4px;
 }
 
 .sidebar-nav-separator {
   height: 1px;
-  background: #1E293B;
+  background: rgba(255, 255, 255, 0.08);
   margin: 14px 8px;
 }
 
 .sidebar-footer-figma {
-  border-top: 1px solid #1E293B;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 18px;
   margin-top: auto;
   display: flex;
@@ -1243,7 +1243,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #06B6D4;
+  background: #2563EB;
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -1297,8 +1297,8 @@
 
 /* Figma Hero Vehicle Card */
 .hero-card-figma {
-  background: #0D1B2A;
-  border: 1px solid #1E293B;
+  background: #0E1526;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   padding: 24px;
   box-shadow: var(--shadow-md);
@@ -1391,8 +1391,8 @@
   border-radius: 14px;
   overflow: hidden;
   margin: 16px 0;
-  border: 1px solid #1E293B;
-  background: #07111F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #080C14;
   max-height: 220px;
 }
 
@@ -1451,7 +1451,7 @@
 }
 
 .btn-update-km {
-  background: #14263A;
+  background: #151F36;
   border: 1px solid #243B53;
   color: #FFFFFF;
   font-size: 0.85rem;
@@ -1464,11 +1464,11 @@
 
 .btn-update-km:hover {
   background: #1B334D;
-  border-color: #06B6D4;
+  border-color: #2563EB;
 }
 
 .btn-view-bike {
-  background: #06B6D4;
+  background: #2563EB;
   color: #FFFFFF;
   font-size: 0.85rem;
   font-weight: 700;
@@ -1477,11 +1477,11 @@
   cursor: pointer;
   border: none;
   transition: all 0.18s;
-  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
 }
 
 .btn-view-bike:hover {
-  background: #0891B2;
+  background: #1D4ED8;
   transform: translateY(-1px);
 }
 
@@ -1494,8 +1494,8 @@
 }
 
 .metric-card-figma {
-  background: #0D1B2A;
-  border: 1px solid #1E293B;
+  background: #0E1526;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 16px 18px;
   display: flex;
@@ -1505,7 +1505,7 @@
 }
 
 .metric-card-figma:hover {
-  border-color: #334E68;
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .metric-top {
@@ -1535,7 +1535,7 @@
 
 .metric-dot.blue,
 .metric-dot.cyan {
-  background: #06B6D4;
+  background: #2563EB;
 }
 
 .metric-lbl {
@@ -1561,8 +1561,8 @@
 
 /* Figma Task Cards ("What's coming up?" & Maintenance) */
 .task-card-figma {
-  background: #0D1B2A;
-  border: 1px solid #1E293B;
+  background: #0E1526;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 18px 20px;
   display: flex;
@@ -1573,7 +1573,7 @@
 }
 
 .task-card-figma:hover {
-  border-color: #334E68;
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .task-header-row {
@@ -1647,7 +1647,7 @@
 
 .task-dist-val.blue,
 .task-dist-val.cyan {
-  color: #06B6D4;
+  color: #2563EB;
 }
 
 .task-dist-val.green {
@@ -1668,7 +1668,7 @@
   width: 100%;
   height: 5px;
   border-radius: 999px;
-  background: #1E293B;
+  background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
   position: relative;
   margin: 4px 0;
@@ -1686,7 +1686,7 @@
 
 .task-progress-fill.blue,
 .task-progress-fill.cyan {
-  background: #06B6D4;
+  background: #2563EB;
 }
 
 .task-progress-fill.green {
@@ -1710,9 +1710,9 @@
 }
 
 .btn-plan-service {
-  background: rgba(6, 182, 212, 0.12);
-  border: 1px solid rgba(6, 182, 212, 0.25);
-  color: #22D3EE;
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  color: #3B82F6;
   font-size: 0.78rem;
   font-weight: 700;
   padding: 6px 14px;
@@ -1722,15 +1722,15 @@
 }
 
 .btn-plan-service:hover {
-  background: #06B6D4;
+  background: #2563EB;
   color: #FFFFFF;
-  border-color: #06B6D4;
+  border-color: #2563EB;
 }
 
 /* Figma Garage Card */
 .garage-card-figma {
-  background: #0D1B2A;
-  border: 1px solid #1E293B;
+  background: #0E1526;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   overflow: hidden;
   margin-bottom: 20px;
@@ -1739,13 +1739,13 @@
 }
 
 .garage-card-figma:hover {
-  border-color: #334E68;
+  border-color: rgba(255, 255, 255, 0.16);
   transform: translateY(-2px);
 }
 
 .garage-card-figma.active {
-  border-color: #06B6D4;
-  box-shadow: 0 0 0 1px #06B6D4, 0 8px 24px rgba(6, 182, 212, 0.25);
+  border-color: #2563EB;
+  box-shadow: 0 0 0 1px #2563EB, 0 8px 24px rgba(37, 99, 235, 0.25);
 }
 
 .garage-card-img-wrap {
@@ -1753,7 +1753,7 @@
   width: 100%;
   height: 200px;
   overflow: hidden;
-  background: #07111F;
+  background: #080C14;
 }
 
 .garage-card-img {
@@ -1832,7 +1832,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #1E293B;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 12px;
 }
 
@@ -1862,10 +1862,10 @@
 .segmented-pill-tabs {
   display: inline-flex;
   gap: 4px;
-  background: #091322;
+  background: #0B101E;
   padding: 4px;
   border-radius: 12px;
-  border: 1px solid #1E293B;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 22px;
 }
 
@@ -1882,8 +1882,8 @@
 }
 
 .pill-tab-btn.active {
-  background: #14263A;
-  color: #22D3EE;
+  background: #151F36;
+  color: #3B82F6;
   font-weight: 700;
 }
 
@@ -1959,7 +1959,7 @@
 /* =================================================== */
 .bike-picture-upload-dropzone {
   cursor: pointer;
-  border: 1.5px dashed #1E293B;
+  border: 1.5px dashed rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 22px 16px;
   text-align: center;
@@ -1968,16 +1968,16 @@
 }
 
 .bike-picture-upload-dropzone:hover {
-  border-color: #06B6D4;
-  background: rgba(6, 182, 212, 0.06);
+  border-color: #2563EB;
+  background: rgba(37, 99, 235, 0.06);
 }
 
 .bike-picture-plus-icon {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: rgba(6, 182, 212, 0.12);
-  color: #06B6D4;
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563EB;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1990,7 +1990,7 @@
   justify-content: space-between;
   gap: 14px;
   background: #0B1321;
-  border: 1px solid #1E293B;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 12px 14px;
 }
@@ -2000,7 +2000,7 @@
   height: 52px;
   border-radius: 8px;
   overflow: hidden;
-  background: #07111F;
+  background: #080C14;
   flex-shrink: 0;
   border: 1px solid #1E232E;
 }
@@ -2012,5 +2012,821 @@
   display: block;
 }
 
+/* High-contrast dark theme tiles for Leaflet / OpenStreetMap */
+.leaflet-container {
+  background: #080C14 !important;
+  font-family: inherit;
+}
 
+.leaflet-tile-pane {
+  filter: brightness(0.62) invert(100%) hue-rotate(180deg) contrast(115%) saturate(35%);
+}
+
+.leaflet-control-zoom a {
+  background: #0E1526 !important;
+  color: #F8FAFC !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: #151F36 !important;
+}
+
+/* =========================================================
+   PREMIUM AUTOMOTIVE MOTORCYCLE COCKPIT DESIGN SYSTEM
+   Editorial Motorcycle Journal + Instrument Cluster Telemetry
+   ========================================================= */
+
+/* 1. PRIMARY HERO: DIGITAL MOTORCYCLE GARAGE */
+.cockpit-hero {
+  position: relative;
+  background: radial-gradient(circle at 75% 30%, rgba(37, 99, 235, 0.12) 0%, transparent 60%),
+              linear-gradient(180deg, #0B101D 0%, #070B14 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.cockpit-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  min-height: 440px;
+  align-items: stretch;
+}
+
+@media (max-width: 992px) {
+  .cockpit-hero-grid {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+}
+
+.cockpit-info-pane {
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+  background: linear-gradient(90deg, #0B101D 65%, rgba(11, 16, 29, 0.85) 85%, transparent 100%);
+}
+
+@media (max-width: 992px) {
+  .cockpit-info-pane {
+    background: #0B101D;
+    padding: 28px 24px;
+  }
+}
+
+.cockpit-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.cockpit-brand-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #3B82F6;
+  background: rgba(37, 99, 235, 0.12);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.cockpit-status-pulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.cockpit-status-pulse.healthy {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.cockpit-status-pulse.soon {
+  background: rgba(245, 158, 11, 0.12);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.cockpit-status-pulse.overdue {
+  background: rgba(239, 68, 68, 0.12);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.cockpit-title-group {
+  margin: 10px 0 24px;
+}
+
+.cockpit-machine-title {
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  line-height: 1;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.cockpit-spec-meta {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #94A3B8;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cockpit-reg-pill {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+  color: #E2E8F0;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.08em;
+}
+
+.cockpit-instrument-cluster {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 18px 22px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  margin-bottom: 28px;
+}
+
+.cockpit-odo-display {
+  display: flex;
+  flex-direction: column;
+}
+
+.cockpit-odo-value {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.cockpit-odo-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-top: 4px;
+}
+
+.cockpit-service-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding-left: 20px;
+}
+
+.cockpit-service-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748B;
+}
+
+.cockpit-service-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #F59E0B;
+}
+
+.cockpit-service-sub {
+  font-size: 0.74rem;
+  color: #94A3B8;
+}
+
+.cockpit-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-cockpit-primary {
+  background: #2563EB;
+  color: #FFFFFF;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+}
+
+.btn-cockpit-primary:hover {
+  background: #1D4ED8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.55);
+}
+
+.btn-cockpit-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-cockpit-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-cockpit-outline {
+  background: transparent;
+  color: #94A3B8;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.btn-cockpit-outline:hover {
+  color: #FFFFFF;
+  border-color: #3B82F6;
+}
+
+/* Hero Stage Right: Visual Viewport */
+.cockpit-visual-pane {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #06090F;
+}
+
+.cockpit-bike-img {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.cockpit-visual-pane:hover .cockpit-bike-img {
+  transform: scale(1.03);
+}
+
+.cockpit-viewfinder-reticle {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cockpit-viewfinder-reticle.tl { top: 16px; left: 16px; }
+.cockpit-viewfinder-reticle.tr { top: 16px; right: 16px; }
+.cockpit-viewfinder-reticle.bl { bottom: 16px; left: 16px; }
+.cockpit-viewfinder-reticle.br { bottom: 16px; right: 16px; }
+
+/* 2. MAINTENANCE TIMELINE / STATUS SYSTEM (NO FLOATING CARDS!) */
+.telemetry-timeline-section {
+  margin-top: 36px;
+}
+
+.telemetry-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.telemetry-section-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.telemetry-section-sub {
+  font-size: 0.78rem;
+  color: #64748B;
+  margin-top: 3px;
+}
+
+.telemetry-timeline-container {
+  background: #0B101D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.telemetry-timeline-row {
+  display: grid;
+  grid-template-columns: 240px 180px 1fr 120px auto;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.15s ease;
+}
+
+@media (max-width: 992px) {
+  .telemetry-timeline-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+}
+
+.telemetry-timeline-row:last-child {
+  border-bottom: none;
+}
+
+.telemetry-timeline-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.telemetry-comp-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.telemetry-comp-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.telemetry-comp-icon-box.amber { background: rgba(245, 158, 11, 0.12); color: #F59E0B; }
+.telemetry-comp-icon-box.green { background: rgba(16, 185, 129, 0.12); color: #10B981; }
+.telemetry-comp-icon-box.blue  { background: rgba(37, 99, 235, 0.12); color: #3B82F6; }
+.telemetry-comp-icon-box.red   { background: rgba(239, 68, 68, 0.12); color: #EF4444; }
+
+.telemetry-comp-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.telemetry-comp-sub {
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.telemetry-dist-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.telemetry-dist-val {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.telemetry-dist-val.amber { color: #F59E0B; }
+.telemetry-dist-val.green { color: #10B981; }
+.telemetry-dist-val.blue  { color: #3B82F6; }
+.telemetry-dist-val.red   { color: #EF4444; }
+
+.telemetry-dist-lbl {
+  font-size: 0.7rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.telemetry-gauge-wrap {
+  width: 100%;
+}
+
+.telemetry-gauge-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  position: relative;
+}
+
+.telemetry-gauge-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.telemetry-gauge-fill.amber { background: #F59E0B; }
+.telemetry-gauge-fill.green { background: #10B981; }
+.telemetry-gauge-fill.blue  { background: #2563EB; }
+.telemetry-gauge-fill.red   { background: #EF4444; }
+
+.telemetry-status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-align: center;
+  display: inline-block;
+}
+
+.telemetry-status-pill.amber { background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.25); }
+.telemetry-status-pill.green { background: rgba(16, 185, 129, 0.12); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.25); }
+.telemetry-status-pill.blue  { background: rgba(37, 99, 235, 0.12); color: #3B82F6; border: 1px solid rgba(37, 99, 235, 0.25); }
+.telemetry-status-pill.red   { background: rgba(239, 68, 68, 0.12); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.25); }
+
+/* 3. YOUR RIDES: VISUAL STATISTICS & JOURNEY LOG */
+.rides-visual-section {
+  margin-top: 40px;
+}
+
+.rides-stats-band {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .rides-stats-band {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.rides-stat-cell {
+  background: #0B101D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.rides-stat-cell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #2563EB;
+  opacity: 0.8;
+}
+
+.rides-stat-value {
+  font-family: var(--font-mono);
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.rides-stat-value small {
+  font-size: 0.9rem;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.rides-stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #94A3B8;
+}
+
+.rides-stat-meta {
+  font-size: 0.72rem;
+  color: #10B981;
+  margin-top: 6px;
+}
+
+/* Recent Journeys List */
+.journey-log-card {
+  background: #0B101D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: all 0.2s;
+}
+
+.journey-log-card:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  transform: translateX(2px);
+}
+
+.journey-route-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.journey-route-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.12);
+  color: #3B82F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.journey-title-line {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.journey-date-line {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.journey-telemetry-cluster {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.journey-tel-col {
+  text-align: right;
+}
+
+.journey-tel-val {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.journey-tel-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748B;
+}
+
+/* 4. REDESIGNED GARAGE: PREMIUM MOTORCYCLE COLLECTION */
+.garage-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 28px;
+}
+
+@media (max-width: 600px) {
+  .garage-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.garage-machine-card {
+  background: #0B101D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.garage-machine-card:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+}
+
+.garage-machine-card.is-active-bike {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 1px #2563EB, 0 16px 36px rgba(37, 99, 235, 0.25);
+}
+
+.garage-machine-hero-media {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  background: #06090F;
+}
+
+.garage-machine-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.garage-machine-card:hover .garage-machine-img {
+  transform: scale(1.04);
+}
+
+.garage-machine-badge-top {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  z-index: 2;
+}
+
+.garage-machine-badge-top.active {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.garage-machine-badge-top.standby {
+  background: rgba(255, 255, 255, 0.1);
+  color: #94A3B8;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.garage-machine-details {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.garage-brand-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3B82F6;
+  margin-bottom: 4px;
+}
+
+.garage-model-name {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.garage-spec-subtext {
+  font-size: 0.8rem;
+  color: #94A3B8;
+  margin-bottom: 16px;
+}
+
+.garage-odo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 20px;
+}
+
+.garage-odo-num {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #FFFFFF;
+}
+
+.garage-odo-num small {
+  font-size: 0.72rem;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.garage-actions-cluster {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* 5. ONBOARDING BRAND SELECTOR CARDS */
+.onboarding-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0 24px;
+}
+
+@media (max-width: 600px) {
+  .onboarding-brand-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.onboarding-brand-tile {
+  background: #0B101D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.onboarding-brand-tile:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  background: #10172B;
+}
+
+.onboarding-brand-tile.selected {
+  border-color: #2563EB;
+  background: rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 1px #2563EB;
+}
+
+.brand-tile-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+}
+
+.brand-tile-desc {
+  font-size: 0.72rem;
+  color: #64748B;
+}
 

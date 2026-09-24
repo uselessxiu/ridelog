@@ -74,6 +74,52 @@ class OnboardingService {
       }
     });
 
+    // Wire Step 1 Brand Selector Tiles
+    const brandTiles = document.querySelectorAll('.onboarding-brand-tile');
+    const brandHiddenInput = document.getElementById('ob-input-make');
+    const modelInput = document.getElementById('ob-input-model');
+    brandTiles.forEach(tile => {
+      tile.addEventListener('click', () => {
+        brandTiles.forEach(t => t.classList.remove('selected'));
+        tile.classList.add('selected');
+        const selectedBrand = tile.getAttribute('data-brand');
+        if (brandHiddenInput) brandHiddenInput.value = selectedBrand;
+        if (modelInput) {
+          if (selectedBrand === 'Royal Enfield') modelInput.value = 'Hunter 350';
+          else if (selectedBrand === 'Honda') modelInput.value = 'CB350';
+          else if (selectedBrand === 'Jawa') modelInput.value = '42 Bobber';
+        }
+      });
+    });
+
+    // Wire Step 1 Photo Upload Picker with 5MB validation
+    const pickPhotoBtn = document.getElementById('btn-ob-pick-photo');
+    const photoInput = document.getElementById('ob-file-input');
+    const photoPreview = document.getElementById('ob-photo-preview');
+    const photoNameLbl = document.getElementById('ob-file-name-lbl');
+
+    if (pickPhotoBtn && photoInput) {
+      pickPhotoBtn.addEventListener('click', () => photoInput.click());
+      photoInput.addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          showToast('Image size exceeds 5MB limit', 'danger');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          this._uploadedPhotoUrl = event.target.result;
+          if (photoPreview) photoPreview.src = event.target.result;
+          if (photoNameLbl) photoNameLbl.textContent = file.name;
+          showToast('Bike picture loaded', 'success');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     // Step 1: Form submission -> Go to Step 2
     const formStep1 = document.getElementById('onboarding-form-step1');
     if (formStep1) {
@@ -81,18 +127,27 @@ class OnboardingService {
         e.preventDefault();
         const make = document.getElementById('ob-input-make')?.value.trim() || 'Royal Enfield';
         const model = document.getElementById('ob-input-model')?.value.trim() || 'Hunter 350';
+        const variant = document.getElementById('ob-input-variant')?.value.trim() || '';
+        const nickname = document.getElementById('ob-input-nickname')?.value.trim() || '';
         const year = Number(document.getElementById('ob-input-year')?.value) || 2023;
         const reg = document.getElementById('ob-input-reg')?.value.trim() || '';
         const currentOdo = Number(document.getElementById('ob-input-odo')?.value) || 0;
+        const purchased = document.getElementById('ob-input-purchased')?.value || '';
+
+        const defaultImg = model.toLowerCase().includes('duke') ? 'assets/duke-390.jpg' : 'assets/hunter-350.jpg';
 
         this._vehicleDraft = {
           manufacturer: make,
           model: model,
-          name: `${make} ${model}`,
+          variant: variant,
+          name: nickname || `${make} ${model}`,
+          nickname: nickname,
           year: year,
           registrationNumber: reg,
           currentMileage: currentOdo,
-          imageUrl: model.toLowerCase().includes('duke') ? 'assets/duke-390.jpg' : 'assets/hunter-350.jpg'
+          purchaseDate: purchased,
+          imageUrl: this._uploadedPhotoUrl || defaultImg,
+          customImageUrl: this._uploadedPhotoUrl || null
         };
 
         this._step = 2;
@@ -243,7 +298,7 @@ class OnboardingService {
 
     // 3. Unlock dashboard
     this.closeOnboarding();
-    showToast(`Welcome aboard! ${vehicle.name} is ready in your garage 🏍️`, 'success');
+    showToast(`Welcome aboard! ${vehicle.name} is ready in your garage`, 'success');
 
     if (this._navigateToTab) {
       this._navigateToTab('dashboard');

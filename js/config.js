@@ -18,12 +18,13 @@ export const CLERK_JS_URL =
  * Project Settings > General > Your apps > Web app (</>)
  */
 export const FIREBASE_CONFIG = {
-  apiKey: (typeof window !== 'undefined' && window.FIREBASE_CONFIG?.apiKey) || '',
-  authDomain: (typeof window !== 'undefined' && window.FIREBASE_CONFIG?.authDomain) || '',
-  projectId: (typeof window !== 'undefined' && window.FIREBASE_CONFIG?.projectId) || '',
-  storageBucket: (typeof window !== 'undefined' && window.FIREBASE_CONFIG?.storageBucket) || '',
-  messagingSenderId: (typeof window !== 'undefined' && window.FIREBASE_CONFIG?.messagingSenderId) || '',
-  appId: (typeof window !== 'undefined' && window.FIREBASE_CONFIG?.appId) || ''
+  apiKey: (typeof window !== 'undefined' && (window.__ENV__?.FIREBASE_API_KEY || window.FIREBASE_CONFIG?.apiKey)) || "AIzaSyBIfqEZi2HmlWFLQVaStezS9y2Pr2NMJlA",
+  authDomain: (typeof window !== 'undefined' && (window.__ENV__?.FIREBASE_AUTH_DOMAIN || window.FIREBASE_CONFIG?.authDomain)) || "ridelog-796ba.firebaseapp.com",
+  projectId: (typeof window !== 'undefined' && (window.__ENV__?.FIREBASE_PROJECT_ID || window.FIREBASE_CONFIG?.projectId)) || "ridelog-796ba",
+  storageBucket: (typeof window !== 'undefined' && (window.__ENV__?.FIREBASE_STORAGE_BUCKET || window.FIREBASE_CONFIG?.storageBucket)) || "ridelog-796ba.firebasestorage.app",
+  messagingSenderId: (typeof window !== 'undefined' && (window.__ENV__?.FIREBASE_MESSAGING_SENDER_ID || window.FIREBASE_CONFIG?.messagingSenderId)) || "961069743496",
+  appId: (typeof window !== 'undefined' && (window.__ENV__?.FIREBASE_APP_ID || window.FIREBASE_CONFIG?.appId)) || "1:961069743496:web:c51fa055b72a16405c4e3d",
+  measurementId: (typeof window !== 'undefined' && (window.__ENV__?.FIREBASE_MEASUREMENT_ID || window.FIREBASE_CONFIG?.measurementId)) || "G-ETLG4LZN9T"
 };
 
 export const FIREBASE_SDK_VERSION = '10.13.2';

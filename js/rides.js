@@ -148,7 +148,7 @@ function setupMapRouteControls() {
           calculateLiveValues();
         }
 
-        showToast('Route charted and ready to log ✓', 'success');
+        showToast('Route charted and ready to log', 'success');
       } catch (err) {
         console.error('Route calculation error:', err);
         if (mapStatusMsg) {
@@ -343,10 +343,10 @@ function handleRideSubmit(navigateToTab) {
 
   if (currentEditingRideId) {
     serviceHistoryService.updateRide(currentEditingRideId, ridePayload);
-    showToast('Ride details updated ✓', 'success');
+    showToast('Ride details updated', 'success');
   } else {
     serviceHistoryService.addRide(ridePayload);
-    showToast('Ride logged! Keep the machine happy 🏍️', 'success');
+    showToast('Ride logged to history', 'success');
   }
 
   resetRideForm();
@@ -492,7 +492,39 @@ export function renderRideHistory(navigateToTab) {
   const sortBy = sortSelect ? sortSelect.value : 'newest';
 
   const activeBike = vehicleService.getActiveVehicle() || storage.getActiveBike();
-  let rides = activeBike ? serviceHistoryService.getRides(activeBike.id) : [];
+  let allBikeRides = activeBike ? serviceHistoryService.getRides(activeBike.id) : [];
+
+  // Calculate and update Rides Summary Stats Band
+  const totalKmEl = document.getElementById('rides-stat-total-km');
+  const countEl = document.getElementById('rides-stat-count');
+  const avgMileageEl = document.getElementById('rides-stat-avg-mileage');
+  const fuelSpentEl = document.getElementById('rides-stat-fuel-spent');
+  const subtitleEl = document.getElementById('rides-history-subtitle');
+
+  if (subtitleEl && activeBike) {
+    subtitleEl.textContent = `Every road, route, and stop logged for ${activeBike.name}.`;
+  }
+
+  const totalKm = allBikeRides.reduce((sum, r) => sum + (Number(r.distance) || 0), 0);
+  const totalCost = allBikeRides.reduce((sum, r) => sum + (Number(r.fuelCost) || 0), 0);
+  const mileageRides = allBikeRides.filter(r => Number(r.mileage) > 0);
+  const avgMileage = mileageRides.length > 0
+    ? (mileageRides.reduce((sum, r) => sum + Number(r.mileage), 0) / mileageRides.length).toFixed(1)
+    : '—';
+
+  if (totalKmEl) totalKmEl.innerHTML = `${formatNumber(Math.round(totalKm))} <small style="font-size: 0.75rem; color: #64748B;">km</small>`;
+  if (countEl) countEl.textContent = String(allBikeRides.length);
+  if (avgMileageEl) avgMileageEl.innerHTML = `${avgMileage} <small style="font-size: 0.75rem; color: #64748B;">km/L</small>`;
+  if (fuelSpentEl) fuelSpentEl.textContent = formatCurrency(Math.round(totalCost));
+
+  // Wire Add Ride Header Button
+  const logBtn = document.getElementById('btn-history-log-ride');
+  if (logBtn && !logBtn._bound) {
+    logBtn._bound = true;
+    logBtn.addEventListener('click', () => navigateToTab('add-ride'));
+  }
+
+  let rides = [...allBikeRides];
 
   // Search filter
   if (searchQuery) {
@@ -517,23 +549,23 @@ export function renderRideHistory(navigateToTab) {
   if (rides.length === 0) {
     if (searchQuery) {
       container.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-title">No rides match "${searchQuery}"</div>
-          <div class="empty-state-desc">Try searching for a different destination or route name.</div>
+        <div style="background: #0B101D; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 48px 24px; text-align: center; color: #64748B;">
+          <div style="font-weight: 800; font-size: 1.2rem; color: #FFFFFF; margin-bottom: 6px;">No rides match "${searchQuery}"</div>
+          <div style="font-size: 0.88rem; color: #94A3B8;">Try searching for a different destination or route waypoint.</div>
         </div>
       `;
     } else {
       container.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div style="background: #0B101D; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 48px 24px; text-align: center; color: #64748B;">
+          <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(37, 99, 235, 0.12); color: #3B82F6; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <polygon points="12 8 8 12 12 16 16 12 12 8"></polygon>
             </svg>
           </div>
-          <div class="empty-state-title">No rides logged for ${activeBike.name} yet</div>
-          <div class="empty-state-desc">Every great journey starts with the first kilometer. Record your trip to track mileage and fuel stops.</div>
-          <button class="btn btn-primary btn-sm" id="btn-history-add-first">Log your first ride</button>
+          <div style="font-weight: 800; font-size: 1.25rem; color: #FFFFFF; margin-bottom: 6px;">No Journeys Recorded for ${activeBike.name}</div>
+          <div style="font-size: 0.88rem; color: #94A3B8; margin-bottom: 20px; max-width: 440px; margin-left: auto; margin-right: auto;">Every great journey starts with the first kilometer. Record your route to track fuel consumption and distance telemetry.</div>
+          <button class="btn-cockpit-primary" id="btn-history-add-first" style="margin: 0 auto;">+ Log First Ride</button>
         </div>
       `;
       const btn = document.getElementById('btn-history-add-first');
@@ -543,41 +575,53 @@ export function renderRideHistory(navigateToTab) {
   }
 
   container.innerHTML = `
-    <div class="rides-list">
+    <div class="rides-timeline-list">
       ${rides.map(ride => `
-        <div class="ride-card" data-id="${ride.id}">
-          <div class="ride-card-top">
-            <span class="ride-name">${ride.name || 'Ride'}</span>
-            <span class="ride-date">${formatDate(ride.date)}</span>
+        <div class="journey-log-card" data-id="${ride.id}">
+          <div class="journey-route-wrap">
+            <div class="journey-route-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                <line x1="8" y1="2" x2="8" y2="18"></line>
+                <line x1="16" y1="6" x2="16" y2="22"></line>
+              </svg>
+            </div>
+            <div>
+              <div class="journey-title-line" style="display: flex; align-items: center; gap: 8px;">
+                <span>${ride.name || ride.route || 'Ride'}</span>
+                ${ride.startLatitude ? '<span class="badge" style="background: rgba(37, 99, 235, 0.15); color: #3B82F6; font-size: 0.68rem; padding: 2px 8px; border-radius: 6px;">Mapped Route</span>' : ''}
+              </div>
+              <div class="journey-date-line">
+                <span>${ride.route || ''}</span>
+                <span style="margin: 0 6px;">•</span>
+                <span>${formatDate(ride.date)}</span>
+              </div>
+            </div>
           </div>
-          <div class="ride-route">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            ${ride.route || 'Route'}
-            ${ride.startLatitude ? '<span class="badge" style="background: var(--accent-subtle); color: var(--accent); margin-left: auto; font-size: 0.65rem;">🗺️ Mapped</span>' : ''}
-          </div>
-          <div class="ride-stats-row">
-            <div class="ride-stat">
-              <span class="ride-stat-lbl">Distance</span>
-              <span class="ride-stat-val">${formatNumber(ride.distance)} <small>km</small></span>
+
+          <div class="journey-telemetry-cluster">
+            <div class="journey-tel-col">
+              <span class="journey-tel-val tabular-nums">${formatNumber(ride.distance || 0)} km</span>
+              <div class="journey-tel-lbl">Distance</div>
             </div>
-            <div class="ride-stat">
-              <span class="ride-stat-lbl">Mileage</span>
-              <span class="ride-stat-val">${ride.mileage} <small>km/L</small></span>
+            <div class="journey-tel-col">
+              <span class="journey-tel-val tabular-nums">${ride.mileage ? `${ride.mileage} km/L` : '—'}</span>
+              <div class="journey-tel-lbl">Economy</div>
             </div>
-            <div class="ride-stat">
-              <span class="ride-stat-lbl">Fuel Cost</span>
-              <span class="ride-stat-val">${formatCurrency(ride.fuelCost)}</span>
+            <div class="journey-tel-col">
+              <span class="journey-tel-val tabular-nums">${formatCurrency(ride.fuelCost || 0)}</span>
+              <div class="journey-tel-lbl">Fuel Spent</div>
             </div>
+            <button class="btn-cockpit-outline btn-inspect-ride" data-id="${ride.id}" style="padding: 7px 14px; font-size: 0.78rem;">
+              Details →
+            </button>
           </div>
         </div>
       `).join('')}
     </div>
   `;
 
-  container.querySelectorAll('.ride-card').forEach(card => {
+  container.querySelectorAll('.journey-log-card').forEach(card => {
     card.addEventListener('click', () => {
       const id = card.getAttribute('data-id');
       openRideDetailModal(id);

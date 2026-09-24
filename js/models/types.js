@@ -72,6 +72,7 @@ export function createVehicle(data = {}) {
   return {
     id: data.id || `veh_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
     ownerId,
+    bikeModelId: data.bikeModelId || (data.brandId && data.modelId && data.modelYear ? `${data.brandId}-${data.modelId}-${data.modelYear}`.toLowerCase().replace(/[^a-z0-9]+/g, '-') : null),
     brandId,
     modelId,
     variantId: data.variantId || data.variant || '',
@@ -82,6 +83,7 @@ export function createVehicle(data = {}) {
     purchaseDate: data.purchaseDate || '',
     image,
     isActive: Boolean(data.isActive ?? true),
+    specs: data.specs || null,
     createdAt: data.createdAt || now,
     updatedAt: data.updatedAt || now,
 

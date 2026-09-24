@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#07111F" />
+  <meta name="theme-color" content="#080C14" />
   <meta name="description" content="RideLog - Premium desktop and mobile motorcycle ride, fuel, mileage, and maintenance tracker." />
   <title>RideLog — Motorcycle Ride & Maintenance Tracker</title>
 
@@ -36,8 +36,8 @@
 <body>
 
   <!-- Clerk Auth Loading Screen (Zero Flash of Protected Content) -->
-  <div id="app-auth-loader" style="position: fixed; inset: 0; background: #07111F; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: opacity 0.3s ease;">
-    <div class="sidebar-logo-figma" style="width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #06B6D4; color: #fff; box-shadow: 0 0 24px rgba(6, 182, 212, 0.4);">
+  <div id="app-auth-loader" style="position: fixed; inset: 0; background: #080C14; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: opacity 0.3s ease;">
+    <div class="sidebar-logo-figma" style="width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #2563EB; color: #fff; box-shadow: 0 0 24px rgba(37, 99, 235, 0.4);">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <circle cx="6" cy="19" r="3"></circle>
         <circle cx="18" cy="19" r="3"></circle>
@@ -95,15 +95,15 @@
             <span>Maintenance</span>
           </button>
 
-          <div class="sidebar-nav-separator"></div>
-
-          <button class="nav-item sidebar-nav-item-figma" data-tab="rides" title="Service History">
+          <button class="nav-item sidebar-nav-item-figma" data-tab="rides" title="Rides">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
-            <span>Service History</span>
+            <span>Rides</span>
           </button>
+
+          <div class="sidebar-nav-separator"></div>
 
           <button class="nav-item sidebar-nav-item-figma" data-tab="settings" id="btn-sidebar-settings-nav" title="Settings">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -177,7 +177,11 @@
           <!-- Desktop Active Vehicle Switcher Dropdown -->
           <div class="bike-switcher-wrap">
             <button class="topbar-btn" id="btn-desktop-bike-switcher" title="Switch ride">
-              <span>🏍️</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="6" cy="19" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <path d="M12 17h4.5l2.5-6H6"></path>
+              </svg>
               <span id="desktop-topbar-bike-name">Hunter 350</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polyline points="6 9 12 15 18 9"></polyline>
@@ -231,72 +235,105 @@
         <!-- ========================================== -->
         <main id="screen-dashboard" class="app-screen">
 
-          <!-- Desktop Greeting Header -->
-          <div style="margin-bottom: 24px;">
-            <h1 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em;" id="dash-greeting-text">Good morning, Rajarshee</h1>
-            <p style="font-size: 0.85rem; color: #64748B; margin-top: 4px;" id="dash-greeting-sub">Here's the status of your machine today.</p>
-          </div>
-
-          <!-- Hero Vehicle Card Container -->
+          <!-- Primary Hero: Digital Motorcycle Garage -->
           <div id="dash-hero-container"></div>
 
-          <!-- 4 Metric Cards Grid -->
-          <div class="metric-grid-figma" id="dash-metrics-container"></div>
-
-          <!-- What's Coming Up Section -->
-          <div style="margin-top: 32px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-              <h3 style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF;">What's coming up?</h3>
-              <button class="link-btn" id="btn-dash-view-all-maint" style="font-size: 0.82rem; color: #3B82F6; font-weight: 600;">View all</button>
-            </div>
-            <div id="dash-upcoming-container"></div>
-          </div>
-
-          <!-- Secondary Insights: Mileage Trend Chart & Performance Statistics -->
-          <div class="dash-desktop-grid" style="margin-top: 32px;">
-            
-            <!-- Left Column: Recent Rides -->
-            <div class="dash-col-primary">
-              <!-- Recent Rides Section -->
+          <!-- Section: What's Coming Up (Maintenance Telemetry Timeline) -->
+          <section class="telemetry-timeline-section">
+            <div class="telemetry-header-bar">
               <div>
-                <div class="section-header">
-                  <h3 class="section-title">Recent rides</h3>
-                  <button class="link-btn" id="btn-dash-view-all-rides">See all</button>
-                </div>
-                <div id="dash-recent-rides">
-                  <!-- Rendered dynamically via dashboard.js -->
-                </div>
+                <h2 class="telemetry-section-title">What's Coming Up</h2>
+                <p class="telemetry-section-sub">Mechanical wear telemetry and scheduled component service intervals</p>
+              </div>
+              <button class="link-btn" id="btn-dash-view-all-maint" style="font-size: 0.82rem; color: #3B82F6; font-weight: 700;">View full schedule →</button>
+            </div>
+            <div id="dash-upcoming-container" class="telemetry-timeline-container">
+              <!-- Rendered via dashboard.js as precision timeline rows -->
+            </div>
+          </section>
+
+          <!-- Section: Your Rides (Visual Statistics & Recent Journeys) -->
+          <section class="rides-visual-section">
+            <div class="telemetry-header-bar">
+              <div>
+                <h2 class="telemetry-section-title">Your Rides</h2>
+                <p class="telemetry-section-sub">Expedition logs, telemetry distance, and fuel efficiency</p>
+              </div>
+              <button class="link-btn" id="btn-dash-view-all-rides" style="font-size: 0.82rem; color: #3B82F6; font-weight: 700;">All rides log →</button>
+            </div>
+
+            <!-- Visual Statistics Band -->
+            <div class="rides-stats-band">
+              <div class="rides-stat-cell">
+                <span class="rides-stat-value tabular-nums" id="stat-this-month-dist">1,284 <small>KM</small></span>
+                <span class="rides-stat-label">THIS MONTH</span>
+                <span class="rides-stat-meta">+14% vs previous month</span>
+              </div>
+              <div class="rides-stat-cell">
+                <span class="rides-stat-value tabular-nums" id="stat-total-rides">8</span>
+                <span class="rides-stat-label">RIDES LOGGED</span>
+                <span class="rides-stat-meta">Verified telemetry</span>
+              </div>
+              <div class="rides-stat-cell">
+                <span class="rides-stat-value tabular-nums" id="stat-longest-ride">186 <small>KM</small></span>
+                <span class="rides-stat-label">LONGEST RIDE</span>
+                <span class="rides-stat-meta" id="stat-longest-ride-name">Highway expedition</span>
+              </div>
+              <div class="rides-stat-cell">
+                <span class="rides-stat-value tabular-nums" id="stat-avg-mileage">36.5 <small>KM/L</small></span>
+                <span class="rides-stat-label">FUEL EFFICIENCY</span>
+                <span class="rides-stat-meta" id="stat-fuel-cost">₹2,850 spent</span>
               </div>
             </div>
 
-            <!-- Right Column: Ride Statistics Overview -->
-            <div class="dash-col-secondary">
-              <div class="card" style="background: #13161C; border: 1px solid #1E232E; border-radius: 16px;">
-                <div class="section-header" style="margin: 0 0 12px;">
-                  <h3 class="section-title">Ride statistics</h3>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
-                    <span style="font-size: 0.78rem; color: #64748B;">Total distance</span>
-                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-total-dist">0 km</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
-                    <span style="font-size: 0.78rem; color: #64748B;">Average mileage</span>
-                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-avg-mileage">0.0 km/L</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
-                    <span style="font-size: 0.78rem; color: #64748B;">Fuel spent</span>
-                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-fuel-cost">₹0</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #0B0D11; border-radius: 8px;">
-                    <span style="font-size: 0.78rem; color: #64748B;">Trips taken</span>
-                    <span style="font-size: 0.92rem; font-weight: 700; color: #FFFFFF;" id="stat-total-rides">0</span>
-                  </div>
-                </div>
+            <!-- Recent Journey Records -->
+            <div id="dash-recent-rides">
+              <!-- Rendered dynamically via dashboard.js -->
+            </div>
+          </section>
+
+          <!-- Section: Quick Actions Cockpit -->
+          <section style="margin-top: 40px; margin-bottom: 24px;">
+            <div class="telemetry-header-bar">
+              <div>
+                <h2 class="telemetry-section-title">Quick Actions</h2>
+                <p class="telemetry-section-sub">Direct access to logging, garage specs, and navigation</p>
               </div>
             </div>
-
-          </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+              <button class="btn-cockpit-secondary" id="btn-quick-log-ride" style="justify-content: flex-start; padding: 16px 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                <div style="text-align: left;">
+                  <div style="font-weight: 700; color: #FFF; font-size: 0.9rem;">Log a New Ride</div>
+                  <div style="font-size: 0.72rem; color: #64748B;">Record trip distance and fuel</div>
+                </div>
+              </button>
+              <button class="btn-cockpit-secondary" id="btn-quick-plan-service" style="justify-content: flex-start; padding: 16px 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+                <div style="text-align: left;">
+                  <div style="font-weight: 700; color: #FFF; font-size: 0.9rem;">Record Service</div>
+                  <div style="font-size: 0.72rem; color: #64748B;">Log oil change or parts replaced</div>
+                </div>
+              </button>
+              <button class="btn-cockpit-secondary" id="btn-quick-garage" style="justify-content: flex-start; padding: 16px 20px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                  <circle cx="6" cy="19" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <path d="M12 17h4.5l2.5-6H6"></path>
+                </svg>
+                <div style="text-align: left;">
+                  <div style="font-weight: 700; color: #FFF; font-size: 0.9rem;">Manage Garage</div>
+                  <div style="font-size: 0.72rem; color: #64748B;">Switch active bike or edit specs</div>
+                </div>
+              </button>
+            </div>
+          </section>
 
         </main>
 
@@ -306,10 +343,13 @@
         <section id="screen-garage" class="app-screen">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
             <div>
-              <h1 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em;">My Garage</h1>
-              <p style="font-size: 0.85rem; color: #64748B; margin-top: 4px;" id="garage-bikes-count-sub">2 bikes registered</p>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #3B82F6; margin-bottom: 4px;">// REGISTERED FLEET & MOTORCYCLE STABLE</div>
+              <h1 style="font-size: 2.2rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em; text-transform: uppercase;">MY GARAGE</h1>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin-top: 4px;" id="garage-bikes-count-sub">2 machines registered in active stable.</p>
             </div>
-            <button class="btn btn-primary" id="btn-add-bike-garage" style="width: auto; padding: 10px 20px; font-weight: 700;">+ Add a ride</button>
+            <button class="btn-cockpit-primary" id="btn-add-bike-garage">
+              <span>+ Add Motorcycle</span>
+            </button>
           </div>
 
           <!-- Garage Motorcycle Cards Grid -->
@@ -337,8 +377,13 @@
               <div class="add-ride-map-col">
                 <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 16px;">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
-                      <span>🗺️</span> Map your route (optional)
+                    <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2">
+                        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                        <line x1="8" y1="2" x2="8" y2="18"></line>
+                        <line x1="16" y1="6" x2="16" y2="22"></line>
+                      </svg>
+                      <span>Map your route (optional)</span>
                     </span>
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-show-route" style="width: auto; padding: 5px 12px; font-size: 0.78rem;">
                       Show route
@@ -452,26 +497,54 @@
         <!-- ========================================== -->
         <section id="screen-rides" class="app-screen">
           
-          <div class="section-header" style="margin-top: 4px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
             <div>
-              <h2 class="section-title">Past rides</h2>
-              <p style="font-size: 0.8rem; color: var(--text-muted);">Every road, route, and stop you've logged</p>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #3B82F6; margin-bottom: 4px;">// EXPEDITION LOGS & ROUTE TELEMETRY</div>
+              <h1 style="font-size: 2.2rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em; text-transform: uppercase;">RIDE HISTORY</h1>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin-top: 4px;" id="rides-history-subtitle">Every road, route, and stop you've logged.</p>
+            </div>
+            <button class="btn-cockpit-primary" id="btn-history-log-ride">
+              <span>+ Log New Ride</span>
+            </button>
+          </div>
+
+          <!-- Rides Telemetry Summary Band -->
+          <div class="rides-stats-band" style="margin-bottom: 24px;">
+            <div class="rides-stat-item">
+              <div class="rides-stat-label">TOTAL DISTANCE</div>
+              <div class="rides-stat-value tabular-nums" id="rides-stat-total-km">0 <small style="font-size: 0.75rem; color: #64748B;">km</small></div>
+              <div class="rides-stat-meta">Verified odometer log</div>
+            </div>
+            <div class="rides-stat-item">
+              <div class="rides-stat-label">EXPEDITIONS</div>
+              <div class="rides-stat-value tabular-nums" id="rides-stat-count">0</div>
+              <div class="rides-stat-meta">Journeys recorded</div>
+            </div>
+            <div class="rides-stat-item">
+              <div class="rides-stat-label">AVG FUEL EFFICIENCY</div>
+              <div class="rides-stat-value tabular-nums" id="rides-stat-avg-mileage">— <small style="font-size: 0.75rem; color: #64748B;">km/L</small></div>
+              <div class="rides-stat-meta">Lifetime economy</div>
+            </div>
+            <div class="rides-stat-item">
+              <div class="rides-stat-label">TOTAL FUEL EXPENSE</div>
+              <div class="rides-stat-value tabular-nums" id="rides-stat-fuel-spent">₹0</div>
+              <div class="rides-stat-meta">Fuel ledger sum</div>
             </div>
           </div>
 
           <!-- Search & Sort Controls -->
-          <div class="search-filter-wrap">
-            <div class="search-input-box">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <div class="search-filter-wrap" style="background: #0B101D; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 10px 16px; margin-bottom: 20px;">
+            <div class="search-input-box" style="background: transparent; border: none; padding: 0;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #64748B;">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
-              <input type="text" id="input-ride-search" class="search-input" placeholder="Search route, title, town..." />
+              <input type="text" id="input-ride-search" class="search-input" placeholder="Search route, title, waypoint..." style="background: transparent;" />
             </div>
 
             <div class="filter-row">
-              <span class="filter-label">Sort by:</span>
-              <select id="select-ride-sort" class="filter-select">
+              <span class="filter-label" style="font-size: 0.76rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Sort:</span>
+              <select id="select-ride-sort" class="filter-select" style="background: #10172B; border: 1px solid rgba(255, 255, 255, 0.08); color: #FFF; border-radius: 8px; font-size: 0.8rem; padding: 6px 12px;">
                 <option value="newest">Newest first</option>
                 <option value="oldest">Oldest first</option>
                 <option value="longest">Longest trip</option>
@@ -494,21 +567,39 @@
           
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
             <div>
-              <h1 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em;">Keep it running.</h1>
-              <p style="font-size: 0.85rem; color: #64748B; margin-top: 4px;" id="maint-bike-subtitle">Scheduled maintenance for Hunter 350</p>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #3B82F6; margin-bottom: 4px;">// SERVICE SCHEDULE & WEAR TELEMETRY</div>
+              <h1 style="font-size: 2.2rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.03em; text-transform: uppercase;">MAINTENANCE</h1>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin-top: 4px;" id="maint-bike-subtitle">Keep the machine ready.</p>
             </div>
-            <button class="btn btn-primary" id="btn-add-maint-header" style="width: auto; padding: 10px 20px; font-weight: 700;">+ Plan service</button>
+            <button class="btn-cockpit-primary" id="btn-add-maint-header">
+              <span>+ Plan service</span>
+            </button>
+          </div>
+
+          <!-- Primary Status Readout Banner -->
+          <div style="background: radial-gradient(circle at 90% 50%, rgba(37, 99, 235, 0.12) 0%, transparent 60%), #0B101D; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 24px 28px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; box-shadow: 0 0 10px #F59E0B;"></span>
+                <span style="font-family: var(--font-mono); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #F59E0B;">PRIMARY SERVICE STATUS</span>
+              </div>
+              <div style="font-size: 1.4rem; font-weight: 900; color: #FFFFFF;" id="maint-banner-title">NEXT SERVICE // 420 KM REMAINING</div>
+              <div style="font-size: 0.8rem; color: #64748B; margin-top: 4px;" id="maint-banner-sub">Due at 12,870 km · Engine oil & routine filter replacement</div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn-cockpit-outline" id="btn-maint-update-odo" style="padding: 10px 18px; font-size: 0.82rem;">Calibrate Odometer</button>
+            </div>
           </div>
 
           <!-- Segmented Pill Tabs -->
           <div class="segmented-pill-tabs" id="maint-pill-tabs">
-            <button class="pill-tab-btn active" data-maint-filter="upcoming" id="tab-maint-upcoming">Upcoming (3)</button>
+            <button class="pill-tab-btn active" data-maint-filter="upcoming" id="tab-maint-upcoming">Upcoming (4)</button>
             <button class="pill-tab-btn" data-maint-filter="overdue" id="tab-maint-overdue">Overdue (0)</button>
-            <button class="pill-tab-btn" data-maint-filter="completed" id="tab-maint-completed">Completed (2)</button>
+            <button class="pill-tab-btn" data-maint-filter="completed" id="tab-maint-completed">Completed (3)</button>
           </div>
 
-          <!-- Tasks List Container -->
-          <div id="maint-tasks-container">
+          <!-- Tasks List Container (Tactical Mechanical Timeline) -->
+          <div id="maint-tasks-container" class="telemetry-timeline-container">
             <!-- Rendered dynamically via maintenance.js -->
           </div>
 
@@ -519,7 +610,7 @@
         <!-- ========================================== -->
         <section id="screen-landing" class="app-screen">
           <div style="max-width: 800px; margin: 40px auto; text-align: center; padding: 24px;">
-            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 16px; background: #06B6D4; color: #fff; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 16px; background: #2563EB; color: #fff; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);">
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="6" cy="19" r="3"></circle>
                 <circle cx="18" cy="19" r="3"></circle>
@@ -531,23 +622,39 @@
 
             <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px;">
               <button class="btn btn-primary" id="btn-landing-signin" style="font-size: 0.95rem; font-weight: 700; padding: 12px 28px;">Sign In</button>
-              <button class="btn btn-outline" id="btn-landing-signup" style="font-size: 0.95rem; font-weight: 600; padding: 12px 28px; background: #0D1B2A; border: 1px solid #1E293B; color: #FFFFFF;">Create Account</button>
+              <button class="btn btn-outline" id="btn-landing-signup" style="font-size: 0.95rem; font-weight: 600; padding: 12px 28px; background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.08); color: #FFFFFF;">Create Account</button>
             </div>
 
             <!-- Feature Grid Highlights -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; text-align: left;">
-              <div class="card" style="background: #0D1B2A; border: 1px solid #1E293B; border-radius: 16px; padding: 20px;">
-                <div style="font-size: 1.6rem; margin-bottom: 8px;">🏍️</div>
+              <div class="card" style="background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(37, 99, 235, 0.15); color: #3B82F6; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="6" cy="19" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <path d="M12 17h4.5l2.5-6H6"></path>
+                  </svg>
+                </div>
                 <h4 style="font-size: 1rem; font-weight: 700; color: #FFF; margin-bottom: 6px;">Multi-Bike Garage</h4>
                 <p style="font-size: 0.82rem; color: #94A3B8; line-height: 1.5;">Manage your entire stable with specs, custom odometers, and active motorcycle switching.</p>
               </div>
-              <div class="card" style="background: #0D1B2A; border: 1px solid #1E293B; border-radius: 16px; padding: 20px;">
-                <div style="font-size: 1.6rem; margin-bottom: 8px;">⏱️</div>
+              <div class="card" style="background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); color: #F59E0B; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                  </svg>
+                </div>
                 <h4 style="font-size: 1rem; font-weight: 700; color: #FFF; margin-bottom: 6px;">Predictive Service</h4>
                 <p style="font-size: 0.82rem; color: #94A3B8; line-height: 1.5;">Automated urgency alerts for engine oil, chain maintenance, and periodic safety checks.</p>
               </div>
-              <div class="card" style="background: #0D1B2A; border: 1px solid #1E293B; border-radius: 16px; padding: 20px;">
-                <div style="font-size: 1.6rem; margin-bottom: 8px;">🗺️</div>
+              <div class="card" style="background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #10B981; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                    <line x1="8" y1="2" x2="8" y2="18"></line>
+                    <line x1="16" y1="6" x2="16" y2="22"></line>
+                  </svg>
+                </div>
                 <h4 style="font-size: 1rem; font-weight: 700; color: #FFF; margin-bottom: 6px;">Ride History & Fuel</h4>
                 <p style="font-size: 0.82rem; color: #94A3B8; line-height: 1.5;">Log distance, fuel costs, real-time mileage, and route geometry with interactive Leaflet mapping.</p>
               </div>
@@ -560,9 +667,9 @@
         <!-- ========================================== -->
         <section id="screen-login" class="app-screen">
           <div style="max-width: 440px; margin: 40px auto; padding: 20px;">
-            <div class="card" style="background: #0D1B2A; border: 1px solid #1E293B; border-radius: 20px; padding: 32px; box-shadow: var(--shadow-md);">
+            <div class="card" style="background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 32px; box-shadow: var(--shadow-md);">
               <div style="text-align: center; margin-bottom: 24px;">
-                <div style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: #06B6D4; color: #fff; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);">
+                <div style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: #2563EB; color: #fff; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="6" cy="19" r="3"></circle>
                     <circle cx="18" cy="19" r="3"></circle>
@@ -585,13 +692,19 @@
                 <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 8px;">Sign In with Clerk</button>
               </form>
 
-              <div style="margin: 20px 0 16px; border-top: 1px solid #1E293B; padding-top: 16px; text-align: center;">
-                <button type="button" class="btn btn-secondary" id="btn-login-clerk-modal" style="width: 100%; font-size: 0.82rem;">🔐 Open Clerk Sign-In Modal</button>
+              <div style="margin: 20px 0 16px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 16px; text-align: center;">
+                <button type="button" class="btn btn-secondary" id="btn-login-clerk-modal" style="width: 100%; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span>Open Clerk Sign-In Modal</span>
+                </button>
               </div>
 
               <div style="text-align: center; margin-top: 16px;">
                 <span style="font-size: 0.82rem; color: #94A3B8;">Don't have an account? </span>
-                <button type="button" class="link-btn" id="btn-goto-signup" style="font-size: 0.82rem; color: #06B6D4; font-weight: 600;">Sign up</button>
+                <button type="button" class="link-btn" id="btn-goto-signup" style="font-size: 0.82rem; color: #2563EB; font-weight: 600;">Sign up</button>
               </div>
             </div>
           </div>
@@ -602,9 +715,9 @@
         <!-- ========================================== -->
         <section id="screen-signup" class="app-screen">
           <div style="max-width: 440px; margin: 40px auto; padding: 20px;">
-            <div class="card" style="background: #0D1B2A; border: 1px solid #1E293B; border-radius: 20px; padding: 32px; box-shadow: var(--shadow-md);">
+            <div class="card" style="background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 32px; box-shadow: var(--shadow-md);">
               <div style="text-align: center; margin-bottom: 24px;">
-                <div style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: #06B6D4; color: #fff; margin-bottom: 12px;">
+                <div style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; background: #2563EB; color: #fff; margin-bottom: 12px;">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                     <circle cx="8.5" cy="7" r="4"></circle>
@@ -632,13 +745,19 @@
                 <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 8px;">Create Account with Clerk</button>
               </form>
 
-              <div style="margin: 16px 0 12px; border-top: 1px solid #1E293B; padding-top: 12px; text-align: center;">
-                <button type="button" class="btn btn-secondary" id="btn-signup-clerk-modal" style="width: 100%; font-size: 0.82rem;">🔐 Open Clerk Sign-Up Modal</button>
+              <div style="margin: 16px 0 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 12px; text-align: center;">
+                <button type="button" class="btn btn-secondary" id="btn-signup-clerk-modal" style="width: 100%; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span>Open Clerk Sign-Up Modal</span>
+                </button>
               </div>
 
               <div style="text-align: center; margin-top: 20px;">
                 <span style="font-size: 0.82rem; color: #94A3B8;">Already have an account? </span>
-                <button type="button" class="link-btn" id="btn-goto-login" style="font-size: 0.82rem; color: #06B6D4; font-weight: 600;">Sign in</button>
+                <button type="button" class="link-btn" id="btn-goto-login" style="font-size: 0.82rem; color: #2563EB; font-weight: 600;">Sign in</button>
               </div>
             </div>
           </div>
@@ -676,12 +795,12 @@
           <span>Maintenance</span>
         </button>
 
-        <button class="nav-item" data-tab="rides" aria-label="Service History">
+        <button class="nav-item" data-tab="rides" aria-label="Rides">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
-          <span>Service History</span>
+          <span>Rides</span>
         </button>
       </nav>
 
@@ -745,8 +864,13 @@
         </div>
 
         <!-- View Route Button -->
-        <button class="btn btn-secondary" id="btn-view-route-map" style="display: none; margin-bottom: 14px; gap: 8px;">
-          <span>🗺️ See route on map</span>
+        <button class="btn btn-secondary" id="btn-view-route-map" style="display: none; margin-bottom: 14px; gap: 8px; align-items: center;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+            <line x1="8" y1="2" x2="8" y2="18"></line>
+            <line x1="16" y1="6" x2="16" y2="22"></line>
+          </svg>
+          <span>See route on map</span>
         </button>
 
         <div id="modal-ride-notes-container" style="display: none;">
@@ -786,14 +910,107 @@
     </div>
 
     <!-- ========================================== -->
+    <!-- BIKE DIGITAL IDENTITY PROFILE MODAL        -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-bike-profile">
+      <div class="modal-content" style="max-width: 640px; max-height: 90vh; overflow-y: auto; padding: 0; background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; overflow: hidden;">
+        
+        <!-- Hero Image Banner with Floating Back/Close & Badges -->
+        <div style="position: relative; height: 260px; background: #080C14; overflow: hidden;">
+          <img id="profile-bike-img" src="assets/hunter-350.jpg" alt="Bike Hero" style="width: 100%; height: 100%; object-fit: cover;" />
+          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8, 12, 20, 0.2) 0%, rgba(8, 12, 20, 0.85) 100%);"></div>
+          
+          <button class="icon-btn" id="btn-close-bike-profile" aria-label="Close" style="position: absolute; top: 16px; right: 16px; background: rgba(8, 12, 20, 0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.12); color: #fff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+
+          <div style="position: absolute; bottom: 16px; left: 24px; right: 24px;">
+            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+              <span class="badge" id="profile-bike-status-badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.04em;">ACTIVE RIDE</span>
+              <span class="badge" id="profile-bike-year-badge" style="background: rgba(255, 255, 255, 0.1); color: #FFF; font-size: 0.72rem;">2023 MODEL</span>
+            </div>
+            <h2 id="profile-bike-title" style="font-size: 1.7rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em; margin: 0;">Royal Enfield Hunter 350</h2>
+            <div id="profile-bike-nickname" style="font-size: 0.88rem; color: #94A3B8; margin-top: 2px;">"Shadow Hunter" · WB-02-AK-1234</div>
+          </div>
+        </div>
+
+        <div style="padding: 24px;">
+          <!-- Telemetry Quick Numbers -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
+            <div style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 14px;">
+              <span style="font-size: 0.72rem; text-transform: uppercase; color: #64748B; font-weight: 700; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Odometer</span>
+              <span id="profile-bike-odo" class="tabular-nums" style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF;">12,450 <small style="font-size: 0.75rem; color: #94A3B8;">km</small></span>
+            </div>
+            <div style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 14px;">
+              <span style="font-size: 0.72rem; text-transform: uppercase; color: #64748B; font-weight: 700; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Service Status</span>
+              <span id="profile-bike-service-status" style="font-size: 1.05rem; font-weight: 700; color: #F59E0B;">Due in 420 km</span>
+            </div>
+            <div style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 14px;">
+              <span style="font-size: 0.72rem; text-transform: uppercase; color: #64748B; font-weight: 700; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Trips Logged</span>
+              <span id="profile-bike-trips-count" class="tabular-nums" style="font-size: 1.25rem; font-weight: 800; color: #3B82F6;">14</span>
+            </div>
+          </div>
+
+          <!-- Digital Identity & Factory Specs -->
+          <div style="margin-bottom: 24px;">
+            <h4 style="font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.06em; color: #94A3B8; font-weight: 700; margin-bottom: 12px;">Technical Specifications</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.84rem;">
+              <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #151F36; border-radius: 8px;">
+                <span style="color: #64748B;">Manufacturer</span>
+                <span id="profile-spec-make" style="font-weight: 600; color: #FFF;">Royal Enfield</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #151F36; border-radius: 8px;">
+                <span style="color: #64748B;">Model Line</span>
+                <span id="profile-spec-model" style="font-weight: 600; color: #FFF;">Hunter 350</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #151F36; border-radius: 8px;">
+                <span style="color: #64748B;">Variant</span>
+                <span id="profile-spec-variant" style="font-weight: 600; color: #FFF;">Metro Dapper</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #151F36; border-radius: 8px;">
+                <span style="color: #64748B;">Displacement</span>
+                <span id="profile-spec-cc" style="font-weight: 600; color: #FFF;">349 cc</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #151F36; border-radius: 8px;">
+                <span style="color: #64748B;">Purchase Date</span>
+                <span id="profile-spec-purchased" style="font-weight: 600; color: #FFF;">15 Mar 2023</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #151F36; border-radius: 8px;">
+                <span style="color: #64748B;">Registration Plate</span>
+                <span id="profile-spec-reg" style="font-weight: 600; color: #FFF;">WB-02-AK-1234</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 18px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline btn-sm" id="btn-profile-change-photo" style="font-size: 0.8rem;">Change Photo</button>
+              <input type="file" id="input-profile-photo-file" accept="image/jpeg,image/png,image/webp" style="display: none;" />
+              <button class="btn btn-secondary btn-sm" id="btn-profile-edit-specs" style="font-size: 0.8rem;">Edit Specs</button>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-primary btn-sm" id="btn-profile-set-active" style="font-size: 0.8rem; font-weight: 700;">Set as Active Machine</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
     <!-- ADD/EDIT MOTORCYCLE MODAL                  -->
     <!-- ========================================== -->
     <div class="modal-overlay" id="modal-bike-form">
-      <div class="modal-content">
+      <div class="modal-content" style="max-width: 560px;">
         <div class="modal-header">
           <div>
-            <h3 class="modal-title" id="modal-bike-title">Add a ride</h3>
-            <p id="modal-bike-subtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Tell us a little about it and we'll take care of the rest.</p>
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #3B82F6;" id="modal-bike-badge">// GARAGE FLEET SETUP</div>
+            <h3 class="modal-title" id="modal-bike-title">Add Your Bike</h3>
+            <p id="modal-bike-subtitle" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">Enter your motorcycle model to identify it and load catalogue specifications.</p>
           </div>
           <button class="icon-btn" id="btn-close-bike-modal" aria-label="Close">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -803,7 +1020,135 @@
           </button>
         </div>
 
-        <form id="form-motorcycle">
+        <!-- STAGE 1: AI SEARCH VIEW -->
+        <div id="ai-bike-search-view">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="input-ai-bike-query" style="font-weight: 700; color: #E2E8F0; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.78rem;">What bike do you ride? *</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="input-ai-bike-query" class="form-input" placeholder="e.g. Royal Enfield Hunter 350, Honda CB350, Jawa 42..." autofocus style="font-size: 0.95rem;" />
+              <button type="button" class="btn btn-primary" id="btn-ai-identify" style="white-space: nowrap; padding: 0 16px; font-weight: 700;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; vertical-align: middle;">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                Identify
+              </button>
+            </div>
+            <span style="font-size: 0.74rem; color: #64748B; margin-top: 6px; display: block;">
+              AI searches the Firestore master catalogue or extracts structured manufacturer specifications.
+            </span>
+          </div>
+
+          <!-- Suggested Model Chips -->
+          <div style="margin-bottom: 20px;">
+            <div style="font-size: 0.7rem; font-family: var(--font-mono); color: #94A3B8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">POPULAR MARQUES & MODELS:</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="ai-bike-chips">
+              <button type="button" class="badge" style="cursor: pointer; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); color: #93C5FD; padding: 5px 10px;" data-query="Royal Enfield Hunter 350">Royal Enfield Hunter 350</button>
+              <button type="button" class="badge" style="cursor: pointer; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); color: #93C5FD; padding: 5px 10px;" data-query="Honda CB350">Honda CB350</button>
+              <button type="button" class="badge" style="cursor: pointer; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); color: #93C5FD; padding: 5px 10px;" data-query="Jawa 42">Jawa 42</button>
+              <button type="button" class="badge" style="cursor: pointer; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); color: #93C5FD; padding: 5px 10px;" data-query="KTM Duke 390">KTM Duke 390</button>
+            </div>
+          </div>
+
+          <div style="text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 16px;">
+            <button type="button" id="btn-toggle-manual-entry" style="background: none; border: none; color: #94A3B8; font-size: 0.78rem; text-decoration: underline; cursor: pointer;">
+              Or configure motorcycle specifications manually
+            </button>
+          </div>
+        </div>
+
+        <!-- STAGE 2: LOADING VIEW -->
+        <div id="ai-bike-loading-view" style="display: none; padding: 36px 16px; text-align: center;">
+          <div class="spinner" style="margin: 0 auto 16px auto; width: 36px; height: 36px; border: 3px solid rgba(59,130,246,0.2); border-top-color: #3B82F6; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+          <div style="font-family: var(--font-mono); font-size: 0.76rem; color: #3B82F6; letter-spacing: 0.12em; text-transform: uppercase;" id="ai-loading-status">// ANALYZING MARQUE & SPECIFICATIONS</div>
+          <p style="font-size: 0.85rem; color: #94A3B8; margin-top: 6px;" id="ai-loading-sub">Searching Firestore master catalogue & validating technical data...</p>
+        </div>
+
+        <!-- STAGE 3: MOTORCYCLE FOUND CONFIRMATION VIEW -->
+        <div id="ai-bike-confirm-view" style="display: none;">
+          <div style="background: #0B1120; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span id="ai-confirm-badge" style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; color: #10B981; text-transform: uppercase;">
+                ● MOTORCYCLE FOUND
+              </span>
+              <span id="ai-confirm-tag" style="font-size: 0.68rem; color: #64748B; font-family: var(--font-mono);">
+                CATALOGUE REFERENCE
+              </span>
+            </div>
+
+            <div style="font-size: 0.8rem; font-weight: 700; color: #3B82F6; text-transform: uppercase; letter-spacing: 0.08em;" id="ai-confirm-brand">
+              Royal Enfield
+            </div>
+            <h2 style="font-size: 1.6rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.02em; margin: 2px 0 6px 0;" id="ai-confirm-model">
+              Hunter 350
+            </h2>
+            <div style="font-size: 0.82rem; color: #94A3B8; margin-bottom: 14px;" id="ai-confirm-meta">
+              Year: <strong id="ai-confirm-year" style="color: #F8FAFC;">2025</strong> • Category: <span id="ai-confirm-category">Roadster</span>
+            </div>
+
+            <!-- Specs Grid -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 10px; text-align: center;">
+              <div>
+                <div style="font-size: 0.65rem; color: #64748B; text-transform: uppercase; font-family: var(--font-mono);">Engine</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #F8FAFC; margin-top: 2px;" id="ai-confirm-cc">—</div>
+              </div>
+              <div>
+                <div style="font-size: 0.65rem; color: #64748B; text-transform: uppercase; font-family: var(--font-mono);">Cooling</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #F8FAFC; margin-top: 2px;" id="ai-confirm-cooling">—</div>
+              </div>
+              <div>
+                <div style="font-size: 0.65rem; color: #64748B; text-transform: uppercase; font-family: var(--font-mono);">Power</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #F8FAFC; margin-top: 2px;" id="ai-confirm-power">—</div>
+              </div>
+              <div>
+                <div style="font-size: 0.65rem; color: #64748B; text-transform: uppercase; font-family: var(--font-mono);">Fuel Tank</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #F8FAFC; margin-top: 2px;" id="ai-confirm-tank">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Personalization Details -->
+          <div style="margin-bottom: 18px;">
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;">
+              YOUR GARAGE CUSTOMIZATION:
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div class="form-group">
+                <label class="form-label" for="ai-confirm-nickname">Motorcycle Nickname</label>
+                <input type="text" id="ai-confirm-nickname" class="form-input" placeholder="e.g. My Daily Hunter" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ai-confirm-odo">Current Odometer (km) *</label>
+                <input type="number" id="ai-confirm-odo" class="form-input tabular-nums" placeholder="12450" value="0" min="0" required />
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label" for="ai-confirm-reg">Registration Plate</label>
+                <input type="text" id="ai-confirm-reg" class="form-input" placeholder="e.g. WB-02-AK-1234" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ai-confirm-purchased">Purchase Date</label>
+                <input type="date" id="ai-confirm-purchased" class="form-input" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirmation Actions -->
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-primary" id="btn-ai-confirm-bike" style="flex: 2; font-weight: 700;">
+              Confirm Bike & Add to Garage
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-ai-search-again" style="flex: 1;">
+              Search Again
+            </button>
+          </div>
+        </div>
+
+        <!-- STAGE 4: MANUAL FORM (Fallback & Edit Existing) -->
+        <form id="form-motorcycle" style="display: none;">
           <div class="form-group">
             <label class="form-label" for="input-bike-name">Motorcycle nickname or model *</label>
             <input type="text" id="input-bike-name" class="form-input" placeholder="e.g. Hunter 350 or My Daily Commuter" required />
@@ -835,12 +1180,10 @@
             <div class="form-group">
               <label class="form-label" for="input-bike-odo">Current odometer (km)</label>
               <input type="number" id="input-bike-odo" class="form-input" placeholder="12500" />
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Keep this updated so your service reminders stay accurate.</span>
             </div>
             <div class="form-group">
               <label class="form-label" for="input-bike-reg">Registration number</label>
               <input type="text" id="input-bike-reg" class="form-input" placeholder="e.g. WB-02-AK-1234" />
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Helps tell your bikes apart in your garage.</span>
             </div>
           </div>
 
@@ -849,7 +1192,10 @@
             <input type="date" id="input-bike-purchased" class="form-input" />
           </div>
 
-          <button type="submit" class="btn btn-primary" id="btn-submit-bike" style="margin-top: 12px;">Save motorcycle</button>
+          <div style="display: flex; gap: 10px; margin-top: 12px;">
+            <button type="submit" class="btn btn-primary" id="btn-submit-bike" style="flex: 2;">Save motorcycle</button>
+            <button type="button" class="btn btn-secondary" id="btn-cancel-manual" style="flex: 1;">Back to AI search</button>
+          </div>
         </form>
       </div>
     </div>
@@ -976,10 +1322,17 @@
     <!-- ========================================== -->
     <!-- SETTINGS & DEMO DATA MODAL                 -->
     <!-- ========================================== -->
+    <!-- ========================================== -->
+    <!-- SETTINGS & CONSOLE MODAL                   -->
+    <!-- ========================================== -->
     <div class="modal-overlay" id="modal-settings">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">Settings & preferences</h3>
+      <div class="modal-content" style="max-width: 580px; max-height: 90vh; overflow-y: auto; background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 28px;">
+        <div class="modal-header" style="margin-bottom: 20px;">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #3B82F6; margin-bottom: 4px;">// HARDWARE CONSOLE & PREFERENCES</div>
+            <h3 class="modal-title" style="font-size: 1.4rem; font-weight: 900; color: #FFFFFF; letter-spacing: -0.02em;">SETTINGS</h3>
+            <p style="font-size: 0.8rem; color: #94A3B8; margin-top: 2px;">Configure rider profile, machine designation, and custom photography.</p>
+          </div>
           <button class="icon-btn" id="btn-close-settings-modal" aria-label="Close">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -988,29 +1341,36 @@
           </button>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="input-settings-user">Rider Name</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="text" id="input-settings-user" class="form-input" placeholder="e.g. Rajarshee" />
-            <button class="btn btn-secondary btn-sm" id="btn-save-user-name" style="width: auto; white-space: nowrap;">Save name</button>
-          </div>
-          <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;">Used for your contextual greetings.</span>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="input-settings-bike">Active Ride Nickname</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="text" id="input-settings-bike" class="form-input" placeholder="e.g. Hunter 350" />
-            <button class="btn btn-secondary btn-sm" id="btn-save-bike-name" style="width: auto; white-space: nowrap;">Save ride name</button>
+        <!-- Rider Profile Section -->
+        <div style="background: #111A2E; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 18px; margin-bottom: 16px;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748B; margin-bottom: 10px;">01 // RIDER IDENTITY</div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="input-settings-user" style="font-size: 0.78rem;">Rider Display Name</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="input-settings-user" class="form-input" placeholder="e.g. Rajarshee" style="background: #090E1A;" />
+              <button class="btn-cockpit-primary" id="btn-save-user-name" style="padding: 8px 16px; font-size: 0.8rem; white-space: nowrap;">Save Name</button>
+            </div>
+            <span style="font-size: 0.72rem; color: #64748B; display: block; margin-top: 6px;">Used across your telemetry greetings and log signatures.</span>
           </div>
         </div>
 
+        <!-- Machine Designation Section -->
+        <div style="background: #111A2E; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 18px; margin-bottom: 16px;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748B; margin-bottom: 10px;">02 // ACTIVE MACHINE DESIGNATION</div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="input-settings-bike" style="font-size: 0.78rem;">Active Motorcycle Nickname</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="input-settings-bike" class="form-input" placeholder="e.g. Hunter 350" style="background: #090E1A;" />
+              <button class="btn-cockpit-secondary" id="btn-save-bike-name" style="padding: 8px 16px; font-size: 0.8rem; white-space: nowrap;">Save Nickname</button>
+            </div>
+          </div>
+        </div>
 
-
-        <div style="margin: 20px 0 16px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
-          <label class="form-label" style="margin-bottom: 8px; font-weight: 700;">Bike Picture</label>
+        <!-- Machine Photography Section -->
+        <div style="background: #111A2E; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 18px; margin-bottom: 16px;">
+          <div style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748B; margin-bottom: 10px;">03 // MACHINE PHOTOGRAPHY</div>
+          <label class="form-label" style="font-size: 0.78rem; margin-bottom: 8px;">Custom Motorcycle Photo (JPG, PNG, WebP up to 5 MB)</label>
           
-          <!-- Native hidden file input -->
           <input 
             type="file" 
             id="input-bike-picture" 
@@ -1018,12 +1378,23 @@
             style="display: none;" 
           />
 
-          <!-- Upload Dropzone / Existing Preview Card Container -->
           <div id="bike-picture-container"></div>
         </div>
 
-        <div style="margin-top: 20px; border-top: 1px solid var(--border-subtle); padding-top: 16px; display: flex; justify-content: flex-end;">
-          <button type="button" class="btn btn-secondary" id="btn-close-settings-footer" style="width: auto; padding: 8px 22px; font-size: 0.85rem;">Close</button>
+        <!-- Infrastructure & Security Section -->
+        <div style="background: #111A2E; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 16px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #10B981; display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10B981;"></span>
+              DATABASE & AUTH SYNC
+            </div>
+            <div style="font-size: 0.8rem; color: #94A3B8; margin-top: 4px;">Clerk Session Active · Firebase Firestore Ready</div>
+          </div>
+          <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; font-family: var(--font-mono); font-size: 0.72rem; padding: 4px 10px; border-radius: 6px;">STATUS // ONLINE</span>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="button" class="btn-cockpit-outline" id="btn-close-settings-footer" style="padding: 10px 24px; font-size: 0.85rem;">Close Console</button>
         </div>
       </div>
     </div>
@@ -1063,16 +1434,16 @@
     <!-- MANDATORY ONBOARDING WIZARD MODAL          -->
     <!-- ========================================== -->
     <div class="modal-overlay" id="modal-onboarding">
-      <div class="modal-content" style="max-width: 540px; max-height: 90vh; overflow-y: auto; padding: 28px; background: #0D1B2A; border: 1px solid #1E293B; border-radius: 20px;">
+      <div class="modal-content" style="max-width: 540px; max-height: 90vh; overflow-y: auto; padding: 28px; background: #0E1526; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;">
         <!-- Modal Top Indicator -->
         <div style="margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #06B6D4; letter-spacing: 0.08em;" id="onboarding-step-indicator">Step 1 of 2: Add your ride</span>
+            <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #2563EB; letter-spacing: 0.08em;" id="onboarding-step-indicator">Step 1 of 2: Add your ride</span>
             <span style="font-size: 0.72rem; color: #64748B;">Initial Setup</span>
           </div>
           <!-- Progress bar -->
-          <div style="width: 100%; height: 4px; background: #1E293B; border-radius: 4px; overflow: hidden;">
-            <div id="onboarding-progress-fill" style="width: 50%; height: 100%; background: #06B6D4; transition: width 0.3s ease;"></div>
+          <div style="width: 100%; height: 4px; background: rgba(255, 255, 255, 0.08); border-radius: 4px; overflow: hidden;">
+            <div id="onboarding-progress-fill" style="width: 50%; height: 100%; background: #2563EB; transition: width 0.3s ease;"></div>
           </div>
         </div>
 
@@ -1084,21 +1455,45 @@
           </div>
 
           <form id="onboarding-form-step1">
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label" style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94A3B8;">SELECT MOTORCYCLE MARQUE *</label>
+              <div class="onboarding-brand-grid">
+                <div class="onboarding-brand-tile selected" data-brand="Royal Enfield">
+                  <div class="brand-tile-name">Royal Enfield</div>
+                  <div class="brand-tile-desc">Made Like a Gun • Since 1901</div>
+                </div>
+                <div class="onboarding-brand-tile" data-brand="Honda">
+                  <div class="brand-tile-name">Honda</div>
+                  <div class="brand-tile-desc">The Power of Dreams</div>
+                </div>
+                <div class="onboarding-brand-tile" data-brand="Jawa">
+                  <div class="brand-tile-name">Jawa</div>
+                  <div class="brand-tile-desc">Bohemian Heritage Classic</div>
+                </div>
+              </div>
+              <input type="hidden" id="ob-input-make" value="Royal Enfield" required />
+            </div>
+
             <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
-                <label class="form-label" for="ob-input-make">Manufacturer *</label>
-                <input type="text" id="ob-input-make" class="form-input" value="Royal Enfield" required />
+                <label class="form-label" for="ob-input-model">Model Line *</label>
+                <input type="text" id="ob-input-model" class="form-input" value="Hunter 350" placeholder="e.g. Hunter 350, CB350, 42 Bobber" required />
               </div>
               <div class="form-group">
-                <label class="form-label" for="ob-input-model">Model *</label>
-                <input type="text" id="ob-input-model" class="form-input" value="Hunter 350" required />
+                <label class="form-label" for="ob-input-variant">Variant / Edition</label>
+                <input type="text" id="ob-input-variant" class="form-input" placeholder="e.g. Metro Dapper, H'ness, Deluxe" />
+              </div>
+            </div>
+              <div class="form-group">
+                <label class="form-label" for="ob-input-year">Manufacturing Year *</label>
+                <input type="number" id="ob-input-year" class="form-input" value="2023" min="1980" max="2027" required />
               </div>
             </div>
 
             <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
               <div class="form-group">
-                <label class="form-label" for="ob-input-year">Manufacturing Year *</label>
-                <input type="number" id="ob-input-year" class="form-input" value="2023" min="1980" max="2027" required />
+                <label class="form-label" for="ob-input-nickname">Motorcycle Nickname</label>
+                <input type="text" id="ob-input-nickname" class="form-input" placeholder="e.g. Shadow Hunter, Blue Beast" />
               </div>
               <div class="form-group">
                 <label class="form-label" for="ob-input-reg">Registration Plate</label>
@@ -1106,13 +1501,33 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="ob-input-odo">Current Odometer (km) *</label>
-              <input type="number" id="ob-input-odo" class="form-input" value="12450" min="0" step="1" required style="font-size: 1.15rem; font-weight: 700; color: #06B6D4;" />
-              <span style="font-size: 0.72rem; color: #64748B; margin-top: 4px; display: block;">Used to calculate wear and upcoming service urgency.</span>
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label" for="ob-input-odo">Current Odometer (km) *</label>
+                <input type="number" id="ob-input-odo" class="form-input tabular-nums" value="12450" min="0" step="1" required style="font-size: 1.15rem; font-weight: 700; color: #2563EB;" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ob-input-purchased">Purchase Date</label>
+                <input type="date" id="ob-input-purchased" class="form-input" />
+              </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 10px; padding: 12px;">Continue to Maintenance Setup →</button>
+            <!-- Bike Picture Upload & Preview -->
+            <div class="form-group" style="margin-top: 4px;">
+              <label class="form-label">Bike Picture (JPG, PNG, WebP up to 5 MB)</label>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <div id="ob-photo-preview-wrap" style="width: 72px; height: 50px; border-radius: 8px; overflow: hidden; background: #151F36; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;">
+                  <img id="ob-photo-preview" src="assets/hunter-350.jpg" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <div style="flex: 1;">
+                  <button type="button" class="btn btn-outline btn-sm" id="btn-ob-pick-photo" style="font-size: 0.8rem;">Upload photo</button>
+                  <input type="file" id="ob-file-input" accept="image/jpeg,image/png,image/webp" style="display: none;" />
+                  <span id="ob-file-name-lbl" style="font-size: 0.72rem; color: #64748B; margin-left: 8px;">hunter-350.jpg (default)</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 14px; padding: 12px;">Continue to Maintenance Baseline →</button>
           </form>
         </div>
 
@@ -1126,7 +1541,7 @@
 
           <form id="onboarding-form-step2">
             <!-- Item 1: Full Service -->
-            <div class="ob-maint-item" style="background: #14263A; border: 1px solid #1E293B; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
+            <div class="ob-maint-item" style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <label style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF;" for="ob-input-fullService">Full General Service</label>
                 <button type="button" class="btn-sm btn-outline" id="ob-skip-fullService" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 6px;">Skip</button>
@@ -1138,7 +1553,7 @@
             </div>
 
             <!-- Item 2: Engine Oil -->
-            <div class="ob-maint-item" style="background: #14263A; border: 1px solid #1E293B; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
+            <div class="ob-maint-item" style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <label style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF;" for="ob-input-engineOil">Engine Oil & Filter</label>
                 <button type="button" class="btn-sm btn-outline" id="ob-skip-engineOil" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 6px;">Skip</button>
@@ -1150,7 +1565,7 @@
             </div>
 
             <!-- Item 3: Chain Service -->
-            <div class="ob-maint-item" style="background: #14263A; border: 1px solid #1E293B; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
+            <div class="ob-maint-item" style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <label style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF;" for="ob-input-chain">Chain Lubrication & Tension</label>
                 <button type="button" class="btn-sm btn-outline" id="ob-skip-chain" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 6px;">Skip</button>
@@ -1162,7 +1577,7 @@
             </div>
 
             <!-- Item 4: Air Filter -->
-            <div class="ob-maint-item" style="background: #14263A; border: 1px solid #1E293B; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
+            <div class="ob-maint-item" style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <label style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF;" for="ob-input-airFilter">Air Filter Replacement</label>
                 <button type="button" class="btn-sm btn-outline active" id="ob-skip-airFilter" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 6px;">Undo skip</button>
@@ -1174,7 +1589,7 @@
             </div>
 
             <!-- Item 5: Brake Check & Suspension -->
-            <div class="ob-maint-item" style="background: #14263A; border: 1px solid #1E293B; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;">
+            <div class="ob-maint-item" style="background: #151F36; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <label style="font-size: 0.85rem; font-weight: 700; color: #FFFFFF;" for="ob-input-suspension">Brake & Suspension Inspection</label>
                 <button type="button" class="btn-sm btn-outline active" id="ob-skip-suspension" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 6px;">Undo skip</button>

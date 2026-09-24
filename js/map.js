@@ -4,7 +4,11 @@
  * and OSRM routing calculations.
  */
 
-// Configuration can be customized or provided with custom API keys if needed
+import { vehicleService } from './services/vehicles.js';
+import { serviceHistoryService } from './services/serviceHistory.js';
+import { formatNumber, showToast } from './utils.js';
+
+// Configuration for high-contrast dark telemetry map
 export const MAP_CONFIG = {
   tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   tileAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -21,6 +25,9 @@ let previewMarkers = [];
 let viewRouteMapInstance = null;
 let viewRouteLayer = null;
 let viewRouteMarkers = [];
+
+let explorationMapInstance = null;
+let explorationMarkers = [];
 
 /**
  * Geocode a location query string using Nominatim
@@ -270,6 +277,148 @@ export function showSavedRouteModal(ride) {
       viewRouteMapInstance.fitBounds(group.getBounds(), { padding: [30, 30] });
     }
   }, 200);
+}
+
+/**
+ * Render the dedicated Exploration & Telemetry Map screen
+ */
+export function renderExplorationMap(containerId = 'full-exploration-map', navigateToTab = null) {
+  if (typeof L === 'undefined') {
+    console.warn('Leaflet.js is not loaded.');
+    return;
+  }
+
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const activeBike = vehicleService.getActiveVehicle();
+  const allRides = serviceHistoryService.getAllRides();
+  const currentOdo = Number(activeBike?.currentMileage ?? activeBike?.currentOdo) || 0;
+
+  // Update telemetry header
+  const nameEl = document.getElementById('map-telemetry-bike-name');
+  const regEl = document.getElementById('map-telemetry-reg');
+  const odoEl = document.getElementById('map-telemetry-odo');
+  const routesCountEl = document.getElementById('map-telemetry-routes-count');
+
+  if (nameEl) nameEl.textContent = activeBike ? (activeBike.nickname || activeBike.name) : 'No machine selected';
+  if (regEl) regEl.textContent = activeBike ? (activeBike.registrationNumber || 'Registration Pending') : '—';
+  if (odoEl) odoEl.innerHTML = `${formatNumber(currentOdo)} <small style="font-size: 0.75rem; color: #64748B;">km</small>`;
+  if (routesCountEl) routesCountEl.textContent = allRides.filter(r => r.startLatitude && r.destinationLatitude).length;
+
+  if (!explorationMapInstance) {
+    explorationMapInstance = L.map(containerId, {
+      zoomControl: true,
+      attributionControl: false
+    }).setView(MAP_CONFIG.defaultCenter, MAP_CONFIG.defaultZoom);
+
+    L.tileLayer(MAP_CONFIG.tileLayer, {
+      maxZoom: 19,
+      subdomains: 'abcd',
+      attribution: MAP_CONFIG.tileAttribution
+    }).addTo(explorationMapInstance);
+
+    // Setup Locate Me button
+    const locateBtn = document.getElementById('btn-map-locate-me');
+    if (locateBtn) {
+      locateBtn.addEventListener('click', () => {
+        if ('geolocation' in navigator) {
+          locateBtn.disabled = true;
+          locateBtn.textContent = 'Locating...';
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const { latitude, longitude } = pos.coords;
+              explorationMapInstance.setView([latitude, longitude], 13);
+
+              const userIcon = L.divIcon({
+                className: 'custom-map-marker',
+                html: `<div style="background: #3B82F6; width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px #3B82F6;"></div>`,
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+              });
+
+              L.marker([latitude, longitude], { icon: userIcon })
+                .addTo(explorationMapInstance)
+                .bindPopup('<strong style="color: #0E1526;">Current GPS Location</strong>')
+                .openPopup();
+
+              locateBtn.disabled = false;
+              locateBtn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+                <span>My Location</span>
+              `;
+              showToast('Location updated', 'success');
+            },
+            (err) => {
+              locateBtn.disabled = false;
+              locateBtn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+                <span>My Location</span>
+              `;
+              showToast('Could not retrieve GPS location: ' + err.message, 'danger');
+            },
+            { timeout: 8000 }
+          );
+        } else {
+          showToast('Geolocation is not supported by your browser', 'danger');
+        }
+      });
+    }
+
+    const logRideBtn = document.getElementById('btn-map-log-ride');
+    if (logRideBtn && navigateToTab) {
+      logRideBtn.addEventListener('click', () => navigateToTab('add-ride'));
+    }
+  }
+
+  // Clear existing markers
+  explorationMarkers.forEach(m => explorationMapInstance.removeLayer(m));
+  explorationMarkers = [];
+
+  // Plot existing routes if any
+  const routeBounds = [];
+  allRides.forEach(ride => {
+    if (ride.startLatitude && ride.startLongitude) {
+      const pin = L.divIcon({
+        className: 'custom-map-marker',
+        html: `<div style="background: #10B981; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.5);"></div>`,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+      });
+      const marker = L.marker([ride.startLatitude, ride.startLongitude], { icon: pin }).addTo(explorationMapInstance);
+      marker.bindPopup(`<strong style="color: #0E1526;">${ride.name || 'Ride'}</strong><br><span style="color: #64748B;">${ride.startLocation || ''}</span>`);
+      explorationMarkers.push(marker);
+      routeBounds.push([ride.startLatitude, ride.startLongitude]);
+    }
+    if (ride.destinationLatitude && ride.destinationLongitude) {
+      const destPin = L.divIcon({
+        className: 'custom-map-marker',
+        html: `<div style="background: #EF4444; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.5);"></div>`,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+      });
+      const destMarker = L.marker([ride.destinationLatitude, ride.destinationLongitude], { icon: destPin }).addTo(explorationMapInstance);
+      destMarker.bindPopup(`<strong style="color: #0E1526;">${ride.name || 'Destination'}</strong><br><span style="color: #64748B;">${ride.destination || ''}</span>`);
+      explorationMarkers.push(destMarker);
+      routeBounds.push([ride.destinationLatitude, ride.destinationLongitude]);
+    }
+  });
+
+  if (routeBounds.length > 0) {
+    try {
+      explorationMapInstance.fitBounds(routeBounds, { padding: [40, 40] });
+    } catch(e){}
+  }
+
+  setTimeout(() => {
+    if (explorationMapInstance) explorationMapInstance.invalidateSize();
+  }, 250);
 }
 
 

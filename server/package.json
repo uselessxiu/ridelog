@@ -1,0 +1,14 @@
+{
+  "name": "ridelog-server",
+  "version": "1.0.0",
+  "description": "Secure backend for RIDELOG: Clerk JWT verification, Firestore master catalogue, and Gemini AI bike identification",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "keywords": ["ridelog", "motorcycle", "clerk", "firebase", "gemini"],
+  "author": "RideLog Team",
+  "license": "ISC"
+}

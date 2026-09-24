@@ -8,11 +8,11 @@ import { vehicleService } from './services/vehicles.js';
 import { maintenanceService } from './services/maintenance.js';
 import { serviceHistoryService } from './services/serviceHistory.js';
 import { onboardingService } from './services/onboarding.js';
-import { showToast, formatNumber } from './utils.js';
+import { showToast, formatNumber, getIconSvg } from './utils.js';
 import { renderDashboard, renderMileageChart } from './dashboard.js';
 import { initRidesModule, renderRideHistory, resetRideForm, openRideDetailModal, prefillStartKm } from './rides.js';
 import { initMaintenanceModule, renderMaintenance, calculateSmartStatus, openQuickServiceModal } from './maintenance.js';
-import { initGarageModule, renderGarage, openBikeModal } from './garage.js';
+import { initGarageModule, renderGarage, openBikeModal, openBikeProfileModal } from './garage.js';
 
 let currentTab = 'dashboard';
 
@@ -370,13 +370,13 @@ function syncActiveBikeWidgets() {
         ${allBikes.map(b => `
           <button class="bike-dropdown-item ${b.id === activeBike.id ? 'active' : ''}" data-id="${b.id}">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span>🏍️</span>
+              <span style="color: #3B82F6;">${getIconSvg('motorcycle', 16)}</span>
               <div style="text-align: left;">
                 <div style="font-weight: 600; font-size: 0.88rem; color: var(--text-main);">${b.name}</div>
                 <div style="font-size: 0.72rem; color: var(--text-muted);">${formatNumber(b.currentOdo)} km · ${b.year || '2023'}</div>
               </div>
             </div>
-            ${b.id === activeBike.id ? '<span style="color: var(--accent); font-weight: 700;">✓</span>' : ''}
+            ${b.id === activeBike.id ? `<span style="color: #10B981; display: inline-flex;">${getIconSvg('check', 14)}</span>` : ''}
           </button>
         `).join('')}
         <div style="border-top: 1px solid var(--border-subtle); margin-top: 4px; padding: 4px;">
@@ -390,7 +390,7 @@ function syncActiveBikeWidgets() {
         const id = item.getAttribute('data-id');
         storage.setActiveBikeId(id);
         desktopDropdown.classList.remove('active');
-        showToast(`Switched active ride to ${storage.getActiveBike().name} 🏍️`, 'success');
+        showToast(`Switched active machine to ${storage.getActiveBike().name}`, 'success');
         syncActiveBikeWidgets();
         updateDesktopNotifications();
         navigateToTab(currentTab);
@@ -449,7 +449,9 @@ function updateDesktopNotifications() {
     if (alerts.length === 0) {
       listContainer.innerHTML = `
         <div style="padding: 20px 16px; text-align: center; color: var(--text-muted); font-size: 0.82rem;">
-          <div style="font-size: 1.4rem; margin-bottom: 6px;">✨</div>
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(16, 185, 129, 0.12); color: #10B981; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
           <div style="font-weight: 600; color: var(--text-main);">All caught up!</div>
           <div style="margin-top: 2px;">No upcoming service alerts for ${activeBike.name}.</div>
         </div>
@@ -593,7 +595,7 @@ function setupSettingsModal() {
       if (newName) {
         storage.setUserName(newName);
         syncActiveBikeWidgets();
-        showToast(`Saved! Good to ride with you, ${newName} 👋`, 'success');
+        showToast(`Saved! Good to ride with you, ${newName}`, 'success');
         if (modal) modal.classList.remove('active');
         navigateToTab(currentTab);
       }
@@ -615,7 +617,7 @@ function setupSettingsModal() {
 
       syncActiveBikeWidgets();
 
-      showToast('Motorcycle name updated ✓', 'success');
+      showToast('Motorcycle name updated', 'success');
       if (modal) modal.classList.remove('active');
       navigateToTab(currentTab);
     });
@@ -678,7 +680,7 @@ function setupSettingsModal() {
             renderGarage(navigateToTab);
           }
 
-          showToast('Bike picture updated successfully! 🏍️', 'success');
+          showToast('Bike picture updated successfully', 'success');
           bikePicInput.value = '';
         };
         reader.onerror = () => {
@@ -839,7 +841,7 @@ function setupPublicScreens() {
         showToast('Signing in with Clerk...', 'info');
         const user = await authService.signIn({ email, password });
         if (user) {
-          showToast(`Welcome back, ${user.name}! 🏍️`, 'success');
+          showToast(`Welcome back, ${user.name}!`, 'success');
           navigateToTab('dashboard');
         }
       } catch (err) {
@@ -876,7 +878,7 @@ function setupPublicScreens() {
         showToast('Creating account with Clerk...', 'info');
         const user = await authService.signUp({ name, email, password });
         if (user) {
-          showToast(`Account created! Welcome, ${user.name}! 🏍️`, 'success');
+          showToast(`Account created! Welcome, ${user.name}!`, 'success');
           navigateToTab('dashboard');
         }
       } catch (err) {
@@ -901,16 +903,8 @@ function setupPublicScreens() {
     btnGotoLogin.addEventListener('click', () => navigateToTab('login'));
   }
 
-  // 4. Reactive auth state listener to refresh UI widgets and sync user/vehicle data on auth change
+  // 4. Reactive auth state listener to refresh UI widgets on auth change
   authService.onAuthStateChanged(async (user) => {
-    if (user) {
-      try {
-        await userService.syncUserDocument(user);
-        await vehicleService.syncWithFirestore(user.clerkUserId || user.id);
-      } catch (e) {
-        console.warn('[RideLog] Cloud sync skipped:', e.message);
-      }
-    }
     syncActiveBikeWidgets();
   });
 }
