@@ -20,6 +20,7 @@ const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
 const PORT = parseInt(process.env.PORT || '8080', 10);
+const HOST = process.env.HOST || '0.0.0.0';
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -32,7 +33,9 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain; charset=utf-8',
+  '.webmanifest': 'application/manifest+json'
 };
 
 function sendJson(res, statusCode, data) {
@@ -252,9 +255,31 @@ function handleStaticFile(req, res, pathname) {
     return res.end('403 Forbidden');
   }
 
+  // Security: block access to sensitive directories, files, and server backend code
+  const normalizedPath = pathname.toLowerCase();
+  if (
+    normalizedPath.startsWith('/server') ||
+    normalizedPath.startsWith('/node_modules') ||
+    normalizedPath.includes('/.') ||
+    normalizedPath.endsWith('.env') ||
+    normalizedPath.endsWith('.pem') ||
+    normalizedPath.endsWith('.key') ||
+    (normalizedPath.endsWith('.json') && !normalizedPath.endsWith('manifest.json'))
+  ) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    return res.end('404 Not Found');
+  }
+
   fs.stat(safePath, (err, stats) => {
     if (err || !stats.isFile()) {
-      // Fallback for SPA routing if path is not a file
+      // If the request targets a specific file extension (e.g. missing .js, .css, .png), return 404
+      const requestedExt = path.extname(relativePath).toLowerCase();
+      if (requestedExt) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        return res.end('404 Not Found');
+      }
+
+      // Fallback for client-side SPA routing for extension-less paths (e.g. /rides, /garage)
       const indexPath = path.join(PROJECT_ROOT, 'index.html');
       fs.readFile(indexPath, (indexErr, indexData) => {
         if (indexErr) {
@@ -292,9 +317,9 @@ const server = http.createServer((req, res) => {
   return handleStaticFile(req, res, pathname);
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, HOST, () => {
   console.log(`====================================================`);
-  console.log(` RIDELOG Server running at http://localhost:${PORT}`);
+  console.log(` RIDELOG Server running at http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT} (bound to ${HOST})`);
   console.log(` Static SPA root: ${PROJECT_ROOT}`);
   console.log(` Gemini AI: ${aiProvider.isConfigured() ? 'CONFIGURED' : 'DEV MODE (Model parser only, no fake specs)'}`);
   console.log(` Firestore Project: ${process.env.FIREBASE_PROJECT_ID || 'ridelog-796ba'}`);

@@ -11,6 +11,10 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class FirestoreAdmin {
   constructor() {
@@ -33,13 +37,31 @@ class FirestoreAdmin {
   _initServiceAccount() {
     if (this._serviceAccount) return this._serviceAccount;
 
+    // 1. Production Render: direct JSON string in environment variable
+    const jsonStringEnv = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    if (jsonStringEnv && jsonStringEnv.trim()) {
+      try {
+        const parsed = JSON.parse(jsonStringEnv.trim());
+        if (parsed && typeof parsed === 'object') {
+          this._serviceAccount = parsed;
+          this._projectId = this._serviceAccount.project_id || process.env.FIREBASE_PROJECT_ID || this._projectId;
+          console.log(`[FirestoreAdmin] Service account initialized from FIREBASE_SERVICE_ACCOUNT_JSON for project: ${this._projectId}`);
+          return this._serviceAccount;
+        }
+      } catch (err) {
+        console.warn('[FirestoreAdmin] Could not parse FIREBASE_SERVICE_ACCOUNT_JSON:', err.message);
+      }
+    }
+
     const b64Cred = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
     let credPath = process.env.FIREBASE_SERVICE_ACCOUNT_KEY || process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
     if (!b64Cred && !credPath) {
       const candidates = [
+        path.resolve(__dirname, '..', 'serviceAccountKey.json'),
         path.resolve(process.cwd(), 'server', 'serviceAccountKey.json'),
-        path.resolve(process.cwd(), 'serviceAccountKey.json')
+        path.resolve(process.cwd(), 'serviceAccountKey.json'),
+        path.resolve(__dirname, '..', '..', 'serviceAccountKey.json')
       ];
       for (const p of candidates) {
         if (fs.existsSync(p)) {
