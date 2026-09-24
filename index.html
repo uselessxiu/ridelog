@@ -1007,15 +1007,23 @@
 
 
 
-        <div style="margin: 24px 0 16px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
-          <h4 style="font-size: 0.95rem; margin-bottom: 6px;">Sample rides & garage</h4>
-          <p style="font-size: 0.8rem; margin-bottom: 14px;">Populate sample rides, routes, and realistic maintenance schedules to explore the app.</p>
-          <button class="btn btn-secondary" id="btn-load-demo-data" style="margin-bottom: 12px;">
-            Load sample data
-          </button>
-          <button class="btn btn-danger" id="btn-clear-all-data">
-            Reset all data
-          </button>
+        <div style="margin: 20px 0 16px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+          <label class="form-label" style="margin-bottom: 8px; font-weight: 700;">Bike Picture</label>
+          
+          <!-- Native hidden file input -->
+          <input 
+            type="file" 
+            id="input-bike-picture" 
+            accept="image/jpeg,image/png,image/webp" 
+            style="display: none;" 
+          />
+
+          <!-- Upload Dropzone / Existing Preview Card Container -->
+          <div id="bike-picture-container"></div>
+        </div>
+
+        <div style="margin-top: 20px; border-top: 1px solid var(--border-subtle); padding-top: 16px; display: flex; justify-content: flex-end;">
+          <button type="button" class="btn btn-secondary" id="btn-close-settings-footer" style="width: auto; padding: 8px 22px; font-size: 0.85rem;">Close</button>
         </div>
       </div>
     </div>

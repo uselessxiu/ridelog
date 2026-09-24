@@ -59,15 +59,14 @@ export function createVehicle(data = {}) {
     registrationNumber: data.registrationNumber || '',
     currentMileage,
     imageUrl,
+    image: imageUrl,
     createdAt: data.createdAt || now,
     updatedAt: data.updatedAt || now,
 
     // Backward compatibility aliases for existing UI renderer
     get name() { return name; },
-    get currentOdo() { return currentMileage; },
-    set currentOdo(val) { this.currentMileage = Number(val); },
-    get image() { return imageUrl; },
-    set image(val) { this.imageUrl = val; }
+    get currentOdo() { return this.currentMileage; },
+    set currentOdo(val) { this.currentMileage = Number(val); }
   };
 }
 

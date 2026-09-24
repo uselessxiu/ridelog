@@ -133,6 +133,32 @@ class VehicleService {
     }
     return true;
   }
+
+  /**
+   * Get the display image URL for a vehicle.
+   * Prioritizes user-uploaded images, falls back to appropriate brand assets.
+   * @param {Object} vehicle
+   * @returns {string}
+   */
+  getVehicleImage(vehicle) {
+    if (!vehicle) return 'assets/hunter-350.jpg';
+    if (vehicle.imageUrl && vehicle.imageUrl.trim() !== '') return vehicle.imageUrl;
+    if (vehicle.image && vehicle.image.trim() !== '') return vehicle.image;
+    const name = (vehicle.model || vehicle.name || '').toLowerCase();
+    if (name.includes('duke')) return 'assets/duke-390.jpg';
+    return 'assets/hunter-350.jpg';
+  }
+
+  /**
+   * Check if vehicle has a custom uploaded picture
+   * @param {Object} vehicle
+   * @returns {boolean}
+   */
+  hasCustomImage(vehicle) {
+    if (!vehicle) return false;
+    const img = vehicle.imageUrl || vehicle.image || '';
+    return Boolean(img && !img.startsWith('assets/'));
+  }
 }
 
 export const vehicleService = new VehicleService();

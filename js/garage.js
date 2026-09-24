@@ -81,7 +81,7 @@ export function renderGarage(navigateToTab) {
           serviceColorClass = 'green';
         }
 
-        const bikeImg = bike.image || (bike.name && bike.name.includes('Duke') ? 'assets/duke-390.jpg' : 'assets/hunter-350.jpg');
+        const bikeImg = vehicleService.getVehicleImage(bike);
 
         return `
           <div class="garage-card-figma ${isActive ? 'active' : ''}" data-id="${bike.id}">

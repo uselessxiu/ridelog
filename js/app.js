@@ -6,7 +6,6 @@ import { maintenanceService } from './services/maintenance.js';
 import { serviceHistoryService } from './services/serviceHistory.js';
 import { onboardingService } from './services/onboarding.js';
 import { showToast, formatNumber } from './utils.js';
-import { DEMO_MOTORCYCLES, DEMO_RIDES, DEMO_MAINTENANCE, DEMO_MAINTENANCE_HISTORY } from './demo-data.js';
 import { renderDashboard, renderMileageChart } from './dashboard.js';
 import { initRidesModule, renderRideHistory, resetRideForm, openRideDetailModal, prefillStartKm } from './rides.js';
 import { initMaintenanceModule, renderMaintenance, calculateSmartStatus, openQuickServiceModal } from './maintenance.js';
@@ -506,17 +505,20 @@ function setupSettingsModal() {
   const openBtnMobileAvatar = document.getElementById('mobile-header-avatar');
   const logoutBtn = document.getElementById('btn-sidebar-logout');
   const closeBtn = document.getElementById('btn-close-settings-modal');
+  const closeFooterBtn = document.getElementById('btn-close-settings-footer');
   const bikeNameInput = document.getElementById('input-settings-bike');
   const saveBikeBtn = document.getElementById('btn-save-bike-name');
   const userNameInput = document.getElementById('input-settings-user');
   const saveUserBtn = document.getElementById('btn-save-user-name');
-  const loadDemoBtn = document.getElementById('btn-load-demo-data');
-  const clearDataBtn = document.getElementById('btn-clear-all-data');
+  const bikePicInput = document.getElementById('input-bike-picture');
 
   const openModal = () => {
-    const activeBike = storage.getActiveBike();
-    if (bikeNameInput) bikeNameInput.value = activeBike.name || 'Hunter 350';
+    const activeBike = vehicleService.getActiveVehicle() || storage.getActiveBike();
+    if (bikeNameInput) bikeNameInput.value = activeBike ? (activeBike.name || 'Hunter 350') : 'Hunter 350';
     if (userNameInput) userNameInput.value = storage.getUserName() || 'Rajarshee';
+
+    // Render Bike Picture upload dropzone or preview card
+    renderSettingsBikePicture(activeBike);
 
     // Highlight currently active theme in settings
     const activeTheme = storage.getTheme();
@@ -568,6 +570,12 @@ function setupSettingsModal() {
     });
   }
 
+  if (closeFooterBtn) {
+    closeFooterBtn.addEventListener('click', () => {
+      if (modal) modal.classList.remove('active');
+    });
+  }
+
   if (modal) {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) modal.classList.remove('active');
@@ -592,8 +600,9 @@ function setupSettingsModal() {
   if (saveBikeBtn) {
     saveBikeBtn.addEventListener('click', () => {
       const newName = bikeNameInput.value.trim() || 'Hunter 350';
-      const activeBike = storage.getActiveBike();
+      const activeBike = vehicleService.getActiveVehicle() || storage.getActiveBike();
       activeBike.name = newName;
+      vehicleService.updateVehicle(activeBike.id, { name: newName });
       storage.updateMotorcycle(activeBike);
 
       const settings = storage.getSettings();
@@ -608,43 +617,196 @@ function setupSettingsModal() {
     });
   }
 
-  // Load realistic demo data
-  if (loadDemoBtn) {
-    loadDemoBtn.addEventListener('click', () => {
-      storage.saveMotorcycles(DEMO_MOTORCYCLES);
-      storage.setActiveBikeId(DEMO_MOTORCYCLES[0].id);
-      storage.saveRides(DEMO_RIDES);
-      storage.saveMaintenance(DEMO_MAINTENANCE);
-      storage.saveMaintenanceHistory(DEMO_MAINTENANCE_HISTORY);
+  // Setup Bike Picture upload listener
+  if (bikePicInput) {
+    bikePicInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-      const settings = storage.getSettings();
-      settings.bikeName = DEMO_MOTORCYCLES[0].name;
-      storage.saveSettings(settings);
+      // 1. File format validation
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      const fileExt = file.name.split('.').pop().toLowerCase();
+      if (!allowedTypes.includes(file.type) && !['jpg', 'jpeg', 'png', 'webp'].includes(fileExt)) {
+        showToast('Please select a valid image file (JPG, PNG, or WebP).', 'danger');
+        bikePicInput.value = '';
+        return;
+      }
 
-      showToast('Loaded demo bikes, trips, and service schedules ✓', 'success');
-      if (modal) modal.classList.remove('active');
+      // 2. File size validation (Max 5 MB)
+      const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+      if (file.size > MAX_SIZE) {
+        showToast('Image size exceeds 5 MB. Please select a smaller photo.', 'danger');
+        bikePicInput.value = '';
+        return;
+      }
 
-      syncActiveBikeWidgets();
-      updateDesktopNotifications();
-      navigateToTab(currentTab);
-    });
-  }
+      try {
+        showToast('Processing photo...', 'info');
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+          const rawDataUrl = evt.target.result;
+          // Scale/compress image via canvas to stay safely within localStorage limits
+          const optimizedDataUrl = await optimizeImage(rawDataUrl, 1200, 0.85);
 
-  // Clear all data
-  if (clearDataBtn) {
-    clearDataBtn.addEventListener('click', () => {
-      const confirmed = window.confirm('Are you sure you want to clear your rides, service history, and motorcycle details?');
-      if (confirmed) {
-        storage.clearAll();
-        storage.initAndMigrate();
-        showToast('All data reset. Ready for a clean start.', 'normal');
-        if (modal) modal.classList.remove('active');
-        syncActiveBikeWidgets();
-        updateDesktopNotifications();
-        navigateToTab('dashboard');
+          const activeBike = vehicleService.getActiveVehicle() || storage.getActiveBike();
+          if (!activeBike) {
+            showToast('No active motorcycle found to attach photo.', 'danger');
+            return;
+          }
+
+          // Persist image on vehicle entity via service abstraction and storage
+          activeBike.imageUrl = optimizedDataUrl;
+          activeBike.image = optimizedDataUrl;
+          vehicleService.updateVehicle(activeBike.id, {
+            imageUrl: optimizedDataUrl,
+            image: optimizedDataUrl
+          });
+          storage.updateMotorcycle(activeBike);
+
+          // Update settings modal preview immediately
+          renderSettingsBikePicture(activeBike);
+
+          // Re-render dashboard active hero card and garage
+          syncActiveBikeWidgets();
+          if (currentTab === 'dashboard') {
+            renderDashboard(navigateToTab);
+          } else if (currentTab === 'garage') {
+            renderGarage(navigateToTab);
+          }
+
+          showToast('Bike picture updated successfully! 🏍️', 'success');
+          bikePicInput.value = '';
+        };
+        reader.onerror = () => {
+          showToast('Failed to read image file. Please try another.', 'danger');
+          bikePicInput.value = '';
+        };
+        reader.readAsDataURL(file);
+      } catch (err) {
+        console.error('Image upload failed:', err);
+        showToast('Could not process image.', 'danger');
+        bikePicInput.value = '';
       }
     });
   }
+}
+
+/**
+ * Render Bike Picture UI inside Settings Modal
+ * Shows uploaded picture with [Change] and [✕] (reset) buttons,
+ * or empty dashed dropzone with "+" icon.
+ * @param {Object} activeBike
+ */
+function renderSettingsBikePicture(activeBike) {
+  const container = document.getElementById('bike-picture-container');
+  if (!container) return;
+
+  const currentBike = activeBike || vehicleService.getActiveVehicle() || storage.getActiveBike();
+  const hasCustom = vehicleService.hasCustomImage(currentBike);
+  const displayImg = vehicleService.getVehicleImage(currentBike);
+
+  if (hasCustom) {
+    container.innerHTML = `
+      <div class="bike-picture-preview-card">
+        <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
+          <div class="bike-picture-thumb-wrap">
+            <img src="${displayImg}" alt="${currentBike.name || 'Bike'}" class="bike-picture-thumb" id="settings-bike-img-preview" />
+          </div>
+          <div style="min-width: 0;">
+            <div style="font-size: 0.88rem; font-weight: 700; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              ${currentBike.name || 'Active Machine'}
+            </div>
+            <div style="font-size: 0.74rem; color: #64748B; margin-top: 2px;">Custom motorcycle photo</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-shrink: 0;">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-change-bike-picture" style="width: auto; padding: 6px 14px; font-size: 0.78rem;">Change</button>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-remove-bike-picture" title="Reset to default photo" style="width: auto; padding: 6px 10px; font-size: 0.78rem; color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">✕</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btn-change-bike-picture')?.addEventListener('click', () => {
+      document.getElementById('input-bike-picture')?.click();
+    });
+
+    document.getElementById('btn-remove-bike-picture')?.addEventListener('click', () => {
+      const defaultImg = (currentBike.model || currentBike.name || '').toLowerCase().includes('duke') ? 'assets/duke-390.jpg' : 'assets/hunter-350.jpg';
+      currentBike.imageUrl = '';
+      currentBike.image = defaultImg;
+      vehicleService.updateVehicle(currentBike.id, { imageUrl: '', image: defaultImg });
+      storage.updateMotorcycle(currentBike);
+      renderSettingsBikePicture(currentBike);
+      syncActiveBikeWidgets();
+      if (currentTab === 'dashboard') renderDashboard(navigateToTab);
+      else if (currentTab === 'garage') renderGarage(navigateToTab);
+      showToast('Bike picture reset to default.', 'info');
+    });
+  } else {
+    container.innerHTML = `
+      <div id="btn-trigger-bike-upload" class="bike-picture-upload-dropzone">
+        <div class="bike-picture-plus-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </div>
+        <div style="font-size: 0.88rem; font-weight: 700; color: #FFFFFF;">Add bike picture</div>
+        <div style="font-size: 0.75rem; color: #64748B; margin-top: 4px;">JPG, PNG or WebP · Max 5 MB</div>
+      </div>
+    `;
+
+    document.getElementById('btn-trigger-bike-upload')?.addEventListener('click', () => {
+      document.getElementById('input-bike-picture')?.click();
+    });
+  }
+}
+
+/**
+ * Resize and compress image using HTML5 Canvas to safely store in localStorage
+ * @param {string} dataUrl - Raw image data URL
+ * @param {number} maxDimension - Max width or height (e.g. 1200)
+ * @param {number} quality - JPEG compression quality (0.0 to 1.0)
+ * @returns {Promise<string>}
+ */
+function optimizeImage(dataUrl, maxDimension = 1200, quality = 0.85) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          height = Math.round((height * maxDimension) / width);
+          width = maxDimension;
+        } else {
+          width = Math.round((width * maxDimension) / height);
+          height = maxDimension;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+
+      if (dataUrl.startsWith('data:image/png')) {
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedPng = canvas.toDataURL('image/png');
+        if (compressedPng.length < 900000) {
+          resolve(compressedPng);
+          return;
+        }
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+      const outputType = dataUrl.startsWith('data:image/webp') ? 'image/webp' : 'image/jpeg';
+      resolve(canvas.toDataURL(outputType, quality));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
 }
 
 /**

@@ -1954,4 +1954,63 @@
   }
 }
 
+/* =================================================== */
+/* BIKE PICTURE UPLOAD & PREVIEW IN SETTINGS MODAL    */
+/* =================================================== */
+.bike-picture-upload-dropzone {
+  cursor: pointer;
+  border: 1.5px dashed #1E293B;
+  border-radius: 12px;
+  padding: 22px 16px;
+  text-align: center;
+  background: rgba(13, 27, 42, 0.5);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.bike-picture-upload-dropzone:hover {
+  border-color: #06B6D4;
+  background: rgba(6, 182, 212, 0.06);
+}
+
+.bike-picture-plus-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(6, 182, 212, 0.12);
+  color: #06B6D4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.bike-picture-preview-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: #0B1321;
+  border: 1px solid #1E293B;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.bike-picture-thumb-wrap {
+  width: 72px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #07111F;
+  flex-shrink: 0;
+  border: 1px solid #1E232E;
+}
+
+.bike-picture-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
 

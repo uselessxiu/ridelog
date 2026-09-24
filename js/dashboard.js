@@ -115,7 +115,7 @@ function renderFigmaHeroCard(activeBike, maintenance, navigateToTab) {
   const validRemaining = evaluatedMaint.map(m => m.remainingKm).filter(km => km > 0);
   const nextServiceRemaining = validRemaining.length > 0 ? Math.min(...validRemaining) : 420;
 
-  const bikeImg = activeBike.image || (activeBike.name && activeBike.name.includes('Duke') ? 'assets/duke-390.jpg' : 'assets/hunter-350.jpg');
+  const bikeImg = vehicleService.getVehicleImage(activeBike);
 
   container.innerHTML = `
     <div class="hero-card-figma">
