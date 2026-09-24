@@ -58,40 +58,52 @@ document.addEventListener('DOMContentLoaded', () => {
   initApp();
 });
 
-function initApp() {
+async function initApp() {
   // 1. Run safe schema migration for existing LocalStorage data
   storage.initAndMigrate();
 
   // 2. Initialize Visual Color Theme System (Obsidian, Graphite, Midnight, Carbon)
   setupThemeSystem();
 
-  // 3. Setup navigation (sidebar and bottom nav)
+  // 3. Initialize Clerk Authentication Service
+  await authService.initialize();
+
+  // 4. Setup navigation (sidebar and bottom nav)
   setupNavigation();
 
-  // 4. Setup desktop specific controls (search, notification flyout, vehicle switcher)
+  // 5. Setup desktop specific controls (search, notification flyout, vehicle switcher)
   setupDesktopComponents();
 
-  // 5. Setup settings & demo data modal
+  // 6. Setup settings & demo data modal
   setupSettingsModal();
 
-  // 6. Setup public screen handlers (landing, login, signup)
+  // 7. Setup public screen handlers (landing, login, signup)
   setupPublicScreens();
 
-  // 7. Initialize onboarding wizard
+  // 8. Initialize onboarding wizard
   onboardingService.init(navigateToTab);
 
-  // 8. Initialize feature modules
+  // 9. Initialize feature modules
   initGarageModule(navigateToTab);
   initRidesModule(navigateToTab);
   initMaintenanceModule(navigateToTab);
 
-  // 9. Initial tab render from hash or auth state
+  // 10. Initial tab render from hash or auth state
   const initialHash = window.location.hash.replace('#', '');
   const allRoutes = [...ROUTES.PUBLIC, ...ROUTES.PROTECTED];
   if (allRoutes.includes(initialHash)) {
     navigateToTab(initialHash);
   } else {
     navigateToTab(authService.isAuthenticated() ? 'dashboard' : 'landing');
+  }
+
+  // 11. Dismiss the auth loading screen smoothly (zero flash of protected content)
+  const loader = document.getElementById('app-auth-loader');
+  if (loader) {
+    loader.style.opacity = '0';
+    setTimeout(() => {
+      if (loader.parentNode) loader.remove();
+    }, 300);
   }
 
   window.addEventListener('hashchange', () => {
@@ -101,7 +113,7 @@ function initApp() {
     }
   });
 
-  // 10. Register service worker if supported
+  // 12. Register service worker if supported
   registerServiceWorker();
 }
 
@@ -521,10 +533,25 @@ function setupSettingsModal() {
 
   if (openBtnHeader) openBtnHeader.addEventListener('click', openModal);
   if (openBtnTopbar) openBtnTopbar.addEventListener('click', openModal);
-  if (openBtnSidebar) openBtnSidebar.addEventListener('click', openModal);
   if (openBtnSidebarNav) openBtnSidebarNav.addEventListener('click', openModal);
-  if (openBtnSidebarProfile) openBtnSidebarProfile.addEventListener('click', openModal);
-  if (openBtnMobileAvatar) openBtnMobileAvatar.addEventListener('click', openModal);
+  if (openBtnSidebarProfile) {
+    openBtnSidebarProfile.addEventListener('click', () => {
+      if (authService.isAuthenticated()) {
+        authService.openUserProfile();
+      } else {
+        openModal();
+      }
+    });
+  }
+  if (openBtnMobileAvatar) {
+    openBtnMobileAvatar.addEventListener('click', () => {
+      if (authService.isAuthenticated()) {
+        authService.openUserProfile();
+      } else {
+        openModal();
+      }
+    });
+  }
 
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
@@ -635,15 +662,6 @@ function setupPublicScreens() {
     btnLandingSignup.addEventListener('click', () => navigateToTab('signup'));
   }
 
-  const btnLandingDemo = document.getElementById('btn-landing-demo');
-  if (btnLandingDemo) {
-    btnLandingDemo.addEventListener('click', () => {
-      authService.restoreDemoUser();
-      showToast('Logged in as Guest Rider (Rajarshee) 🏍️', 'success');
-      navigateToTab('dashboard');
-    });
-  }
-
   // 2. Login Screen Actions
   const formLogin = document.getElementById('form-login');
   if (formLogin) {
@@ -652,21 +670,26 @@ function setupPublicScreens() {
       const email = document.getElementById('login-email')?.value.trim();
       const password = document.getElementById('login-password')?.value;
       try {
+        showToast('Signing in with Clerk...', 'info');
         const user = await authService.signIn({ email, password });
-        showToast(`Welcome back, ${user.name}! 🏍️`, 'success');
-        navigateToTab('dashboard');
+        if (user) {
+          showToast(`Welcome back, ${user.name}! 🏍️`, 'success');
+          navigateToTab('dashboard');
+        }
       } catch (err) {
         showToast(err.message || 'Login failed', 'danger');
       }
     });
   }
 
-  const btnLoginDemo = document.getElementById('btn-login-demo-rider');
-  if (btnLoginDemo) {
-    btnLoginDemo.addEventListener('click', () => {
-      authService.restoreDemoUser();
-      showToast('Welcome back, Rajarshee! 🏍️', 'success');
-      navigateToTab('dashboard');
+  const btnLoginClerkModal = document.getElementById('btn-login-clerk-modal');
+  if (btnLoginClerkModal) {
+    btnLoginClerkModal.addEventListener('click', async () => {
+      try {
+        await authService.openSignIn();
+      } catch (err) {
+        showToast(err.message || 'Failed to open Clerk modal', 'danger');
+      }
     });
   }
 
@@ -684,11 +707,25 @@ function setupPublicScreens() {
       const email = document.getElementById('signup-email')?.value.trim();
       const password = document.getElementById('signup-password')?.value;
       try {
+        showToast('Creating account with Clerk...', 'info');
         const user = await authService.signUp({ name, email, password });
-        showToast(`Account created! Welcome, ${user.name}! 🏍️`, 'success');
-        navigateToTab('dashboard');
+        if (user) {
+          showToast(`Account created! Welcome, ${user.name}! 🏍️`, 'success');
+          navigateToTab('dashboard');
+        }
       } catch (err) {
         showToast(err.message || 'Signup failed', 'danger');
+      }
+    });
+  }
+
+  const btnSignupClerkModal = document.getElementById('btn-signup-clerk-modal');
+  if (btnSignupClerkModal) {
+    btnSignupClerkModal.addEventListener('click', async () => {
+      try {
+        await authService.openSignUp();
+      } catch (err) {
+        showToast(err.message || 'Failed to open Clerk modal', 'danger');
       }
     });
   }

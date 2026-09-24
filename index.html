@@ -9,6 +9,7 @@
 
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
   <!-- Leaflet CSS for Interactive Maps -->
@@ -23,8 +24,28 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <!-- Leaflet JS CDN -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Clerk Authentication SDK (Pinned v5.54.1 Stable Browser CDN) -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_ZXZvbHZpbmctYnVycm8tMjQ1Mi5jbGVyay5hY2NvdW50cy5kZXYk"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5.54.1/dist/clerk.browser.js">
+  </script>
 </head>
 <body>
+
+  <!-- Clerk Auth Loading Screen (Zero Flash of Protected Content) -->
+  <div id="app-auth-loader" style="position: fixed; inset: 0; background: #07111F; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: opacity 0.3s ease;">
+    <div class="sidebar-logo-figma" style="width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #06B6D4; color: #fff; box-shadow: 0 0 24px rgba(6, 182, 212, 0.4);">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="6" cy="19" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <path d="M12 17h4.5l2.5-6H6"></path>
+      </svg>
+    </div>
+    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 700; color: #94A3B8; letter-spacing: 0.05em;">LOADING RIDELOG...</div>
+  </div>
 
   <!-- Main Responsive App Shell -->
   <div id="app-container">
@@ -208,7 +229,7 @@
         <!-- ========================================== -->
         <!-- 1. DASHBOARD SCREEN                        -->
         <!-- ========================================== -->
-        <main id="screen-dashboard" class="app-screen active">
+        <main id="screen-dashboard" class="app-screen">
 
           <!-- Desktop Greeting Header -->
           <div style="margin-bottom: 24px;">
@@ -511,7 +532,6 @@
             <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px;">
               <button class="btn btn-primary" id="btn-landing-signin" style="font-size: 0.95rem; font-weight: 700; padding: 12px 28px;">Sign In</button>
               <button class="btn btn-outline" id="btn-landing-signup" style="font-size: 0.95rem; font-weight: 600; padding: 12px 28px; background: #0D1B2A; border: 1px solid #1E293B; color: #FFFFFF;">Create Account</button>
-              <button class="btn btn-secondary" id="btn-landing-demo" style="font-size: 0.95rem; font-weight: 600; padding: 12px 28px;">Continue as Guest Rider</button>
             </div>
 
             <!-- Feature Grid Highlights -->
@@ -556,17 +576,17 @@
               <form id="form-login">
                 <div class="form-group">
                   <label class="form-label" for="login-email">Email Address</label>
-                  <input type="email" id="login-email" class="form-input" placeholder="rider@ridelog.io" value="rajarshee@ridelog.io" required />
+                  <input type="email" id="login-email" class="form-input" placeholder="rider@ridelog.io" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="login-password">Password</label>
-                  <input type="password" id="login-password" class="form-input" placeholder="••••••••" value="demo1234" required />
+                  <input type="password" id="login-password" class="form-input" placeholder="••••••••" required />
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 8px;">Sign In</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 8px;">Sign In with Clerk</button>
               </form>
 
               <div style="margin: 20px 0 16px; border-top: 1px solid #1E293B; padding-top: 16px; text-align: center;">
-                <button type="button" class="btn btn-secondary" id="btn-login-demo-rider" style="width: 100%; font-size: 0.82rem;">⚡ Quick Login as Rajarshee (Demo)</button>
+                <button type="button" class="btn btn-secondary" id="btn-login-clerk-modal" style="width: 100%; font-size: 0.82rem;">🔐 Open Clerk Sign-In Modal</button>
               </div>
 
               <div style="text-align: center; margin-top: 16px;">
@@ -609,8 +629,12 @@
                   <label class="form-label" for="signup-password">Password</label>
                   <input type="password" id="signup-password" class="form-input" placeholder="Create a secure password" required />
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 8px;">Create Account</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 700; margin-top: 8px;">Create Account with Clerk</button>
               </form>
+
+              <div style="margin: 16px 0 12px; border-top: 1px solid #1E293B; padding-top: 12px; text-align: center;">
+                <button type="button" class="btn btn-secondary" id="btn-signup-clerk-modal" style="width: 100%; font-size: 0.82rem;">🔐 Open Clerk Sign-Up Modal</button>
+              </div>
 
               <div style="text-align: center; margin-top: 20px;">
                 <span style="font-size: 0.82rem; color: #94A3B8;">Already have an account? </span>
