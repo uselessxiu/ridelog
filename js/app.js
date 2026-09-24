@@ -1,6 +1,9 @@
 
 import { storage } from './storage.js';
 import { authService } from './services/auth.js';
+import { firebaseService } from './services/firebase.js';
+import { userService } from './services/users.js';
+import { catalogueService } from './services/catalogue.js';
 import { vehicleService } from './services/vehicles.js';
 import { maintenanceService } from './services/maintenance.js';
 import { serviceHistoryService } from './services/serviceHistory.js';
@@ -64,8 +67,9 @@ async function initApp() {
   // 2. Initialize Visual Color Theme System (Obsidian, Graphite, Midnight, Carbon)
   setupThemeSystem();
 
-  // 3. Initialize Clerk Authentication Service
+  // 3. Initialize Clerk Authentication Service and Firebase Firestore Database Layer
   await authService.initialize();
+  await firebaseService.initialize();
 
   // 4. Setup navigation (sidebar and bottom nav)
   setupNavigation();
@@ -897,8 +901,16 @@ function setupPublicScreens() {
     btnGotoLogin.addEventListener('click', () => navigateToTab('login'));
   }
 
-  // 4. Reactive auth state listener to refresh UI widgets on auth change
-  authService.onAuthStateChanged((user) => {
+  // 4. Reactive auth state listener to refresh UI widgets and sync user/vehicle data on auth change
+  authService.onAuthStateChanged(async (user) => {
+    if (user) {
+      try {
+        await userService.syncUserDocument(user);
+        await vehicleService.syncWithFirestore(user.clerkUserId || user.id);
+      } catch (e) {
+        console.warn('[RideLog] Cloud sync skipped:', e.message);
+      }
+    }
     syncActiveBikeWidgets();
   });
 }
